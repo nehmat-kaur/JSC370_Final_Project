@@ -16,7 +16,7 @@ navbar:
     - text: "Report"
       href: report.pdf
     - text: "Demonstration"
-      href: https://drive.google.com/file/d/VIDEO_ID/view?usp=sharing
+      href: https://drive.google.com/file/d/1_S1nfUVqZJlmKwENjmJUlmQC09vEtjJg/view?usp=sharing
 
 output:
   html_document:

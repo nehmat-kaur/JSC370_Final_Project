@@ -1,8 +1,0 @@
-"0","spotify_clean$high_acoustic <- ifelse(spotify_clean$acousticness >= 0.78, ""High Acousticness"", ""Low Acousticness"")"
-"0",""
-"0","p4 <- ggplot(spotify_clean, aes(x = high_acoustic, y = popularity, fill = high_acoustic)) +"
-"0","  geom_boxplot(alpha = 0.7) +"
-"0","  labs(title = ""Popularity by Acousticness Group"", x = ""Acousticness Group"", y = ""Popularity"") +"
-"0","  theme_minimal()"
-"0",""
-"0","ggplotly(p4)"

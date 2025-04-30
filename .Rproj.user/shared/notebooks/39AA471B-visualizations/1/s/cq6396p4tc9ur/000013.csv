@@ -1,8 +1,0 @@
-"0","p1 <- ggplot(spotify_clean, aes(x = tempo, y = popularity)) +"
-"0","  geom_point(alpha = 0.5, color = ""#1DB954"") +"
-"0","  geom_smooth(method = ""loess"", se = FALSE, color = ""black"") +"
-"0","  labs(title = ""Tempo vs Popularity"", x = ""Tempo (BPM)"", y = ""Popularity"") +"
-"0","  theme_minimal()"
-"0",""
-"0","ggplotly(p1)"
-"2","[38;5;232m`geom_smooth()` using formula = 'y ~ x'[39m"
