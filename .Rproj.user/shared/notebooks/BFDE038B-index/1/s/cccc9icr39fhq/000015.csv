@@ -1,0 +1,5 @@
+"0",""
+"0","# Output cross-validation results"
+"0","cv_results <- rf_caret_model$results"
+"0","kable(cv_results, caption = ""Cross-Validation Results for Random Forest"") %>%"
+"0","  kable_styling(full_width = FALSE)"

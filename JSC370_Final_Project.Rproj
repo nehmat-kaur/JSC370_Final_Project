@@ -1,0 +1,18 @@
+Version: 1.0
+ProjectId: d4939c22-9243-4e88-8dc7-5d11f2ca5642
+
+RestoreWorkspace: Default
+SaveWorkspace: Default
+AlwaysSaveHistory: Default
+
+EnableCodeIndexing: Yes
+UseSpacesForTab: Yes
+NumSpacesForTab: 2
+Encoding: UTF-8
+
+RnwWeave: Sweave
+LaTeX: pdfLaTeX
+
+BuildType: Website
+
+ProjectName: JSC370_Final_Project

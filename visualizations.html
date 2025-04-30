@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Harnehmat Kaur (1008882648)" />
+
+<meta name="date" content="2025-04-30" />
+
+<title>Interactive Visualizations</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.10.4/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Spotify Track Popularity Analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="visualizations.html">Visualizations</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Data Sources
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset">Kaggle Dataset</a>
+    </li>
+    <li>
+      <a href="https://developer.spotify.com/documentation/web-api">Spotify API</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="report.pdf">Report</a>
+</li>
+<li>
+  <a href="https://drive.google.com/file/d/VIDEO_ID/view?usp=sharing">Demonstration</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Interactive Visualizations</h1>
+<h4 class="author">Harnehmat Kaur (1008882648)</h4>
+<h4 class="date">2025-04-30</h4>
+
+</div>
+
+
+<div id="interactive-visualizations" class="section level1">
+<h1>Interactive Visualizations</h1>
+<p>This page presents interactive visualizations that reinforce key
+findings from the modeling section. The visualizations focus on
+variables such as <strong>genre</strong>, <strong>tempo</strong>,
+<strong>speechiness</strong>, <strong>acousticness</strong>, and
+<strong>energy</strong>, which were found to significantly influence
+Spotify track popularity.</p>
+<hr />
+<div id="tempo-vs-popularity-interactive-scatterplot"
+class="section level2">
+<h2>1. Tempo vs Popularity (Interactive Scatterplot)</h2>
+<p>Tempo was a moderately important predictor in both the linear
+regression and random forest models.</p>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-20d3bec285d247a31224" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-20d3bec285d247a31224">{"x":{"data":[{"x":[90.048000000000002,65.375,80.018000000000001,112.045,154.96199999999999,119.95,114.797,109.996,98.153999999999996,125.23099999999999,127.919,93.986000000000004,122.379,90.001999999999995,100.45699999999999,74.411000000000001,127.81,74.760000000000005,121.66,104.93600000000001,72.828999999999994,125.014,100.221,160.02799999999999,93.801000000000002,111.998,194.91499999999999,103.214,129.90199999999999,168.673,84.182000000000002,120.726,122.764,78.308000000000007,141.113,115.06399999999999,126.09699999999999,160.488,148.03700000000001,72.558000000000007,87.929000000000002,93.977999999999994,167.99799999999999,92.415999999999997,83.007000000000005,89.766999999999996,145.95699999999999,167.751,120.024,159.94999999999999,102.52500000000001,146.994,140.024,66.543999999999997,169.95400000000001,176.21899999999999,160.12799999999999,92.933999999999997,141.958,187.93700000000001,135.702,94.864999999999995,86.611000000000004,203.959,99.709000000000003,179.91,193.78299999999999,129.994,111.389,165.905,67.304000000000002,134.50700000000001,93.986000000000004,105.197,150.136,76.989999999999995,76.445999999999998,109.97,123.931,88.510999999999996,179.87100000000001,86.305000000000007,66.915000000000006,172.11600000000001,134.93700000000001,167.96100000000001,157.17699999999999,147.90199999999999,133.149,118.006,130.02799999999999,176.071,188.899,52.884,84.789000000000001,90.093000000000004,144.02099999999999,134.905,97.328000000000003,156.035,151.97300000000001,167.23699999999999,117.89100000000001,79.989000000000004,93.037000000000006,96.096999999999994,80.634,94.897000000000006,95.906999999999996,125.998,120.00700000000001,97.111000000000004,80.510000000000005,81.971999999999994,106.849,121.233,120.011,120.041,158.00200000000001,99.983000000000004,97.807000000000002,120.03,101.53100000000001,160.73099999999999,111.637,100.723,106.45999999999999,125.066,112.92700000000001,102.315,98.210999999999999,82.349000000000004,80.924999999999997,81.022000000000006,106.614,150.12100000000001,122.761,92.992999999999995,105.006,143.834,140.011,94.498000000000005,107.479,75.129999999999995,103.018,91.114000000000004,121.923,80.954999999999998,91.057000000000002,154.887,79.543999999999997,123.28,81.697999999999993,140.136,93.192999999999998,83.450999999999993,97.031999999999996,94.025000000000006,142.03999999999999,120.164,107.64100000000001,112.288,162.15799999999999,161.14099999999999,164.04400000000001,167.97900000000001,104.04300000000001,109.991,167.929,87,192.15899999999999,92.989000000000004,130.577,96.043999999999997,58.191000000000003,122.965,177.78100000000001,79.977000000000004,101.75700000000001,153.92099999999999,97.007999999999996,78.141000000000005,134.98099999999999,128.042,130.05500000000001,88.022000000000006,125.895,95.180000000000007,142.87799999999999,148.02699999999999,94.379999999999995,93.953000000000003,134.94499999999999,126.312,85,90.009,95.850999999999999,150.09800000000001,82.478999999999999,90.316000000000003,93.965000000000003,94.900000000000006,70.584999999999994,179.726],"y":[19,5,25,55,32,33,49,42,36,34,25,17,27,60,30,16,1,4,47,35,32,78,31,22,5,8,34,36,24,39,13,11,66,2,36,14,41,72,44,4,32,31,74,20,41,29,19,40,39,49,40,54,24,16,27,22,58,31,34,40,32,13,1,29,39,34,77,39,1,13,16,19,64,45,8,37,39,4,27,30,17,16,44,36,27,69,44,49,6,43,19,11,69,18,67,30,26,40,36,51,35,7,22,49,12,41,47,55,53,52,36,22,43,2,38,51,2,38,50,33,8,23,19,42,39,12,45,1,24,58,30,31,31,38,2,14,19,52,25,49,51,40,17,35,33,48,23,29,33,33,34,40,37,41,37,19,1,32,31,2,50,34,71,18,22,41,23,54,66,12,58,39,41,35,11,12,64,39,60,41,45,22,31,3,1,24,25,24,46,42,10,21,56,21,63,45,35,22,50,32,28,39,18,25],"text":["tempo:  90.048<br />popularity: 19","tempo:  65.375<br />popularity:  5","tempo:  80.018<br />popularity: 25","tempo: 112.045<br />popularity: 55","tempo: 154.962<br />popularity: 32","tempo: 119.950<br />popularity: 33","tempo: 114.797<br />popularity: 49","tempo: 109.996<br />popularity: 42","tempo:  98.154<br />popularity: 36","tempo: 125.231<br />popularity: 34","tempo: 127.919<br />popularity: 25","tempo:  93.986<br />popularity: 17","tempo: 122.379<br />popularity: 27","tempo:  90.002<br />popularity: 60","tempo: 100.457<br />popularity: 30","tempo:  74.411<br />popularity: 16","tempo: 127.810<br />popularity:  1","tempo:  74.760<br />popularity:  4","tempo: 121.660<br />popularity: 47","tempo: 104.936<br />popularity: 35","tempo:  72.829<br />popularity: 32","tempo: 125.014<br />popularity: 78","tempo: 100.221<br />popularity: 31","tempo: 160.028<br />popularity: 22","tempo:  93.801<br />popularity:  5","tempo: 111.998<br />popularity:  8","tempo: 194.915<br />popularity: 34","tempo: 103.214<br />popularity: 36","tempo: 129.902<br />popularity: 24","tempo: 168.673<br />popularity: 39","tempo:  84.182<br />popularity: 13","tempo: 120.726<br />popularity: 11","tempo: 122.764<br />popularity: 66","tempo:  78.308<br />popularity:  2","tempo: 141.113<br />popularity: 36","tempo: 115.064<br />popularity: 14","tempo: 126.097<br />popularity: 41","tempo: 160.488<br />popularity: 72","tempo: 148.037<br />popularity: 44","tempo:  72.558<br />popularity:  4","tempo:  87.929<br />popularity: 32","tempo:  93.978<br />popularity: 31","tempo: 167.998<br />popularity: 74","tempo:  92.416<br />popularity: 20","tempo:  83.007<br />popularity: 41","tempo:  89.767<br />popularity: 29","tempo: 145.957<br />popularity: 19","tempo: 167.751<br />popularity: 40","tempo: 120.024<br />popularity: 39","tempo: 159.950<br />popularity: 49","tempo: 102.525<br />popularity: 40","tempo: 146.994<br />popularity: 54","tempo: 140.024<br />popularity: 24","tempo:  66.544<br />popularity: 16","tempo: 169.954<br />popularity: 27","tempo: 176.219<br />popularity: 22","tempo: 160.128<br />popularity: 58","tempo:  92.934<br />popularity: 31","tempo: 141.958<br />popularity: 34","tempo: 187.937<br />popularity: 40","tempo: 135.702<br />popularity: 32","tempo:  94.865<br />popularity: 13","tempo:  86.611<br />popularity:  1","tempo: 203.959<br />popularity: 29","tempo:  99.709<br />popularity: 39","tempo: 179.910<br />popularity: 34","tempo: 193.783<br />popularity: 77","tempo: 129.994<br />popularity: 39","tempo: 111.389<br />popularity:  1","tempo: 165.905<br />popularity: 13","tempo:  67.304<br />popularity: 16","tempo: 134.507<br />popularity: 19","tempo:  93.986<br />popularity: 64","tempo: 105.197<br />popularity: 45","tempo: 150.136<br />popularity:  8","tempo:  76.990<br />popularity: 37","tempo:  76.446<br />popularity: 39","tempo: 109.970<br />popularity:  4","tempo: 123.931<br />popularity: 27","tempo:  88.511<br />popularity: 30","tempo: 179.871<br />popularity: 17","tempo:  86.305<br />popularity: 16","tempo:  66.915<br />popularity: 44","tempo: 172.116<br />popularity: 36","tempo: 134.937<br />popularity: 27","tempo: 167.961<br />popularity: 69","tempo: 157.177<br />popularity: 44","tempo: 147.902<br />popularity: 49","tempo: 133.149<br />popularity:  6","tempo: 118.006<br />popularity: 43","tempo: 130.028<br />popularity: 19","tempo: 176.071<br />popularity: 11","tempo: 188.899<br />popularity: 69","tempo:  52.884<br />popularity: 18","tempo:  84.789<br />popularity: 67","tempo:  90.093<br />popularity: 30","tempo: 144.021<br />popularity: 26","tempo: 134.905<br />popularity: 40","tempo:  97.328<br />popularity: 36","tempo: 156.035<br />popularity: 51","tempo: 151.973<br />popularity: 35","tempo: 167.237<br />popularity:  7","tempo: 117.891<br />popularity: 22","tempo:  79.989<br />popularity: 49","tempo:  93.037<br />popularity: 12","tempo:  96.097<br />popularity: 41","tempo:  80.634<br />popularity: 47","tempo:  94.897<br />popularity: 55","tempo:  95.907<br />popularity: 53","tempo: 125.998<br />popularity: 52","tempo: 120.007<br />popularity: 36","tempo:  97.111<br />popularity: 22","tempo:  80.510<br />popularity: 43","tempo:  81.972<br />popularity:  2","tempo: 106.849<br />popularity: 38","tempo: 121.233<br />popularity: 51","tempo: 120.011<br />popularity:  2","tempo: 120.041<br />popularity: 38","tempo: 158.002<br />popularity: 50","tempo:  99.983<br />popularity: 33","tempo:  97.807<br />popularity:  8","tempo: 120.030<br />popularity: 23","tempo: 101.531<br />popularity: 19","tempo: 160.731<br />popularity: 42","tempo: 111.637<br />popularity: 39","tempo: 100.723<br />popularity: 12","tempo: 106.460<br />popularity: 45","tempo: 125.066<br />popularity:  1","tempo: 112.927<br />popularity: 24","tempo: 102.315<br />popularity: 58","tempo:  98.211<br />popularity: 30","tempo:  82.349<br />popularity: 31","tempo:  80.925<br />popularity: 31","tempo:  81.022<br />popularity: 38","tempo: 106.614<br />popularity:  2","tempo: 150.121<br />popularity: 14","tempo: 122.761<br />popularity: 19","tempo:  92.993<br />popularity: 52","tempo: 105.006<br />popularity: 25","tempo: 143.834<br />popularity: 49","tempo: 140.011<br />popularity: 51","tempo:  94.498<br />popularity: 40","tempo: 107.479<br />popularity: 17","tempo:  75.130<br />popularity: 35","tempo: 103.018<br />popularity: 33","tempo:  91.114<br />popularity: 48","tempo: 121.923<br />popularity: 23","tempo:  80.955<br />popularity: 29","tempo:  91.057<br />popularity: 33","tempo: 154.887<br />popularity: 33","tempo:  79.544<br />popularity: 34","tempo: 123.280<br />popularity: 40","tempo:  81.698<br />popularity: 37","tempo: 140.136<br />popularity: 41","tempo:  93.193<br />popularity: 37","tempo:  83.451<br />popularity: 19","tempo:  97.032<br />popularity:  1","tempo:  94.025<br />popularity: 32","tempo: 142.040<br />popularity: 31","tempo: 120.164<br />popularity:  2","tempo: 107.641<br />popularity: 50","tempo: 112.288<br />popularity: 34","tempo: 162.158<br />popularity: 71","tempo: 161.141<br />popularity: 18","tempo: 164.044<br />popularity: 22","tempo: 167.979<br />popularity: 41","tempo: 104.043<br />popularity: 23","tempo: 109.991<br />popularity: 54","tempo: 167.929<br />popularity: 66","tempo:  87.000<br />popularity: 12","tempo: 192.159<br />popularity: 58","tempo:  92.989<br />popularity: 39","tempo: 130.577<br />popularity: 41","tempo:  96.044<br />popularity: 35","tempo:  58.191<br />popularity: 11","tempo: 122.965<br />popularity: 12","tempo: 177.781<br />popularity: 64","tempo:  79.977<br />popularity: 39","tempo: 101.757<br />popularity: 60","tempo: 153.921<br />popularity: 41","tempo:  97.008<br />popularity: 45","tempo:  78.141<br />popularity: 22","tempo: 134.981<br />popularity: 31","tempo: 128.042<br />popularity:  3","tempo: 130.055<br />popularity:  1","tempo:  88.022<br />popularity: 24","tempo: 125.895<br />popularity: 25","tempo:  95.180<br />popularity: 24","tempo: 142.878<br />popularity: 46","tempo: 148.027<br />popularity: 42","tempo:  94.380<br />popularity: 10","tempo:  93.953<br />popularity: 21","tempo: 134.945<br />popularity: 56","tempo: 126.312<br />popularity: 21","tempo:  85.000<br />popularity: 63","tempo:  90.009<br />popularity: 45","tempo:  95.851<br />popularity: 35","tempo: 150.098<br />popularity: 22","tempo:  82.479<br />popularity: 50","tempo:  90.316<br />popularity: 32","tempo:  93.965<br />popularity: 28","tempo:  94.900<br />popularity: 39","tempo:  70.585<br />popularity: 18","tempo: 179.726<br />popularity: 25"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(29,185,84,1)","opacity":0.5,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(29,185,84,1)"}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[52.884,54.796341772151898,56.708683544303796,58.621025316455693,60.533367088607591,62.445708860759495,64.358050632911386,66.270392405063291,68.182734177215195,70.095075949367086,72.007417721518976,73.919759493670881,75.832101265822786,77.744443037974676,79.656784810126581,81.569126582278471,83.481468354430376,85.393810126582281,87.306151898734171,89.218493670886062,91.130835443037967,93.043177215189871,94.955518987341776,96.867860759493666,98.780202531645557,100.69254430379746,102.60488607594937,104.51722784810126,106.42956962025316,108.34191139240505,110.25425316455696,112.16659493670886,114.07893670886075,115.99127848101264,117.90362025316455,119.81596202531645,121.72830379746834,123.64064556962025,125.55298734177214,127.46532911392404,129.37767088607592,131.29001265822785,133.20235443037973,135.11469620253163,137.02703797468354,138.93937974683541,140.85172151898735,142.76406329113922,144.67640506329113,146.58874683544303,148.50108860759491,150.41343037974684,152.32577215189872,154.23811392405062,156.15045569620253,158.0627974683544,159.97513924050634,161.88748101265821,163.79982278481012,165.71216455696202,167.6245063291139,169.5368481012658,171.44918987341771,173.36153164556958,175.27387341772152,177.18621518987339,179.0985569620253,181.0108987341772,182.92324050632908,184.83558227848101,186.74792405063289,188.66026582278477,190.5726075949367,192.48494936708857,194.39729113924051,196.30963291139238,198.22197468354426,200.13431645569619,202.04665822784807,203.959],"y":[10.33866485708857,12.114279513045663,13.8153094835374,15.441883009593484,16.994128332243609,18.47217369251749,19.876147331444802,21.206177490055271,22.462392409378598,23.644920330444457,24.753889494282568,25.789428141922635,26.751664514394356,27.640726852727418,28.456743397951541,29.199842391096411,29.870001892205853,30.467271525510682,30.991964562601691,31.444395199992389,31.824877634196294,32.133650156180423,32.2953048370197,32.335891508711782,32.374775558658378,32.28884595468962,32.061223677581566,31.742137839611615,31.381817553057136,31.030491930195502,30.73839008330409,30.534367402788572,30.277130539090809,29.971765741711632,29.668899321369736,29.419157588783836,29.273166854672638,29.281553429754847,29.451082472560987,29.717087602968117,30.061212125902241,30.466244238063918,30.914972136153654,31.390184016871995,31.87466807691947,32.351212512996597,32.807939813044001,33.286666305643912,33.794324359385257,34.32358014341262,34.867099826870572,35.417549578903717,35.967595568656591,36.509903965273793,37.037140937899906,37.541972655679494,38.017065287757156,38.461038155645767,38.893770162753086,39.317625285799373,39.732615732588677,40.138753710925037,40.536051428612502,40.924521093455084,41.304174913256865,41.675025095821852,42.037083848954111,42.390363380457671,42.734875898136579,43.070633609794882,43.397648723236614,43.715933446265808,44.02549998668654,44.326360552302809,44.61852735091869,44.902012590338202,45.176828478365394,45.442987222804327,45.700501031458991,45.949382112133506],"text":["tempo:  52.88400<br />popularity: 10.33866","tempo:  54.79634<br />popularity: 12.11428","tempo:  56.70868<br />popularity: 13.81531","tempo:  58.62103<br />popularity: 15.44188","tempo:  60.53337<br />popularity: 16.99413","tempo:  62.44571<br />popularity: 18.47217","tempo:  64.35805<br />popularity: 19.87615","tempo:  66.27039<br />popularity: 21.20618","tempo:  68.18273<br />popularity: 22.46239","tempo:  70.09508<br />popularity: 23.64492","tempo:  72.00742<br />popularity: 24.75389","tempo:  73.91976<br />popularity: 25.78943","tempo:  75.83210<br />popularity: 26.75166","tempo:  77.74444<br />popularity: 27.64073","tempo:  79.65678<br />popularity: 28.45674","tempo:  81.56913<br />popularity: 29.19984","tempo:  83.48147<br />popularity: 29.87000","tempo:  85.39381<br />popularity: 30.46727","tempo:  87.30615<br />popularity: 30.99196","tempo:  89.21849<br />popularity: 31.44440","tempo:  91.13084<br />popularity: 31.82488","tempo:  93.04318<br />popularity: 32.13365","tempo:  94.95552<br />popularity: 32.29530","tempo:  96.86786<br />popularity: 32.33589","tempo:  98.78020<br />popularity: 32.37478","tempo: 100.69254<br />popularity: 32.28885","tempo: 102.60489<br />popularity: 32.06122","tempo: 104.51723<br />popularity: 31.74214","tempo: 106.42957<br />popularity: 31.38182","tempo: 108.34191<br />popularity: 31.03049","tempo: 110.25425<br />popularity: 30.73839","tempo: 112.16659<br />popularity: 30.53437","tempo: 114.07894<br />popularity: 30.27713","tempo: 115.99128<br />popularity: 29.97177","tempo: 117.90362<br />popularity: 29.66890","tempo: 119.81596<br />popularity: 29.41916","tempo: 121.72830<br />popularity: 29.27317","tempo: 123.64065<br />popularity: 29.28155","tempo: 125.55299<br />popularity: 29.45108","tempo: 127.46533<br />popularity: 29.71709","tempo: 129.37767<br />popularity: 30.06121","tempo: 131.29001<br />popularity: 30.46624","tempo: 133.20235<br />popularity: 30.91497","tempo: 135.11470<br />popularity: 31.39018","tempo: 137.02704<br />popularity: 31.87467","tempo: 138.93938<br />popularity: 32.35121","tempo: 140.85172<br />popularity: 32.80794","tempo: 142.76406<br />popularity: 33.28667","tempo: 144.67641<br />popularity: 33.79432","tempo: 146.58875<br />popularity: 34.32358","tempo: 148.50109<br />popularity: 34.86710","tempo: 150.41343<br />popularity: 35.41755","tempo: 152.32577<br />popularity: 35.96760","tempo: 154.23811<br />popularity: 36.50990","tempo: 156.15046<br />popularity: 37.03714","tempo: 158.06280<br />popularity: 37.54197","tempo: 159.97514<br />popularity: 38.01707","tempo: 161.88748<br />popularity: 38.46104","tempo: 163.79982<br />popularity: 38.89377","tempo: 165.71216<br />popularity: 39.31763","tempo: 167.62451<br />popularity: 39.73262","tempo: 169.53685<br />popularity: 40.13875","tempo: 171.44919<br />popularity: 40.53605","tempo: 173.36153<br />popularity: 40.92452","tempo: 175.27387<br />popularity: 41.30417","tempo: 177.18622<br />popularity: 41.67503","tempo: 179.09856<br />popularity: 42.03708","tempo: 181.01090<br />popularity: 42.39036","tempo: 182.92324<br />popularity: 42.73488","tempo: 184.83558<br />popularity: 43.07063","tempo: 186.74792<br />popularity: 43.39765","tempo: 188.66027<br />popularity: 43.71593","tempo: 190.57261<br />popularity: 44.02550","tempo: 192.48495<br />popularity: 44.32636","tempo: 194.39729<br />popularity: 44.61853","tempo: 196.30963<br />popularity: 44.90201","tempo: 198.22197<br />popularity: 45.17683","tempo: 200.13432<br />popularity: 45.44299","tempo: 202.04666<br />popularity: 45.70050","tempo: 203.95900<br />popularity: 45.94938"],"type":"scatter","mode":"lines","name":"fitted values","line":{"width":3.7795275590551185,"color":"rgba(0,0,0,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826498,"l":37.260273972602747},"font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Tempo vs Popularity","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[45.330249999999999,211.51275000000001],"tickmode":"array","ticktext":["50","100","150","200"],"tickvals":[50,100,150,200],"categoryorder":"array","categoryarray":["50","100","150","200"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Tempo (BPM)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-2.8500000000000001,81.849999999999994],"tickmode":"array","ticktext":["0","20","40","60","80"],"tickvals":[0,19.999999999999996,40,60.000000000000007,80],"categoryorder":"array","categoryarray":["0","20","40","60","80"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Popularity","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"1085a2fcb8bd1":{"x":{},"y":{},"type":"scatter"},"1085a5c485eda":{"x":{},"y":{}}},"cur_data":"1085a2fcb8bd1","visdat":{"1085a2fcb8bd1":["function (y) ","x"],"1085a5c485eda":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p><strong>Interpretation:</strong> This scatterplot shows a weak
+positive trend between tempo and popularity, but with high variability.
+While the trend line slopes slightly upward, there’s no strong linear
+association, indicating that tempo alone is not a strong determinant of
+popularity but may still contribute modestly.</p>
+<hr />
+</div>
+<div id="speechiness-vs-popularity-interactive-scatterplot"
+class="section level2">
+<h2>2. Speechiness vs Popularity (Interactive Scatterplot)</h2>
+<p>Speechiness had a notable negative impact on predicted popularity in
+both the linear regression and regression tree models.</p>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-e59082c1480ccb45c887" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-e59082c1480ccb45c887">{"x":{"data":[{"x":[0.027799999999999998,0.0407,0.0304,0.255,0.085400000000000004,0.040099999999999997,0.0482,0.049200000000000001,0.076200000000000004,0.038800000000000001,0.26600000000000001,0.0465,0.0395,0.056000000000000001,0.053199999999999997,0.055800000000000002,0.0276,0.051400000000000001,0.16700000000000001,0.035099999999999999,0.029899999999999999,0.056899999999999999,0.038300000000000001,0.14699999999999999,0.152,0.121,0.055300000000000002,0.024500000000000001,0.032500000000000001,0.0424,0.0252,0.93300000000000005,0.040000000000000001,0.038899999999999997,0.0448,0.051999999999999998,0.13600000000000001,0.066799999999999998,0.0304,0.067699999999999996,0.032199999999999999,0.088499999999999995,0.0252,0.046899999999999997,0.0361,0.89400000000000002,0.091200000000000003,0.095299999999999996,0.0281,0.27700000000000002,0.0286,0.125,0.0785,0.96299999999999997,0.109,0.055800000000000002,0.050900000000000001,0.046899999999999997,0.030200000000000001,0.16900000000000001,0.050000000000000003,0.037400000000000003,0.040599999999999997,0.030099999999999998,0.32100000000000001,0.19500000000000001,0.16700000000000001,0.042299999999999997,0.036499999999999998,0.031,0.036799999999999999,0.0608,0.039,0.046399999999999997,0.0499,0.21299999999999999,0.047100000000000003,0.059999999999999998,0.069099999999999995,0.043999999999999997,0.26600000000000001,0.40999999999999998,0.049399999999999999,0.25,0.029499999999999998,0.17999999999999999,0.043900000000000002,0.0465,0.054800000000000001,0.033500000000000002,0.034099999999999998,0.0608,0.20100000000000001,0.89900000000000002,0.378,0.038399999999999997,0.10000000000000001,0.19800000000000001,0.038300000000000001,0.034599999999999999,0.091499999999999998,0.0424,0.054199999999999998,0.092899999999999996,0.023699999999999999,0.058500000000000003,0.053199999999999997,0.038699999999999998,0.11,0.033500000000000002,0.085300000000000001,0.088499999999999995,0.027,0.035099999999999999,0.0356,0.26000000000000001,0.039300000000000002,0.090300000000000005,0.045400000000000003,0.049099999999999998,0.14299999999999999,0.036799999999999999,0.13200000000000001,0.030200000000000001,0.042700000000000002,0.068500000000000005,0.0349,0.0385,0.218,0.32500000000000001,0.051400000000000001,0.063600000000000004,0.075399999999999995,0.033700000000000001,0.26400000000000001,0.252,0.036999999999999998,0.152,0.025000000000000001,0.049599999999999998,0.089300000000000004,0.047699999999999999,0.0545,0.041799999999999997,0.073899999999999993,0.063899999999999998,0.0407,0.027300000000000001,0.186,0.0292,0.38100000000000001,0.109,0.041200000000000001,0.249,0.027300000000000001,0.95999999999999996,0.19800000000000001,0.16,0.0292,0.033000000000000002,0.070000000000000007,0.0373,0.036499999999999998,0.58999999999999997,0.17000000000000001,0.027900000000000001,0.94099999999999995,0.030599999999999999,0.053400000000000003,0.93400000000000005,0.53000000000000003,0.056500000000000002,0.038600000000000002,0.068199999999999997,0.92200000000000004,0.040899999999999999,0.038100000000000002,0.16700000000000001,0.042999999999999997,0.039399999999999998,0.36899999999999999,0.035299999999999998,0.0275,0.0327,0.0528,0.041300000000000003,0.037499999999999999,0.17499999999999999,0.027,0.23699999999999999,0.056599999999999998,0.114,0.097500000000000003,0.042299999999999997,0.24399999999999999,0.095399999999999999,0.033700000000000001,0.094299999999999995,0.0252,0.20499999999999999,0.055800000000000002,0.035900000000000001,0.040399999999999998,0.035299999999999998],"y":[19,5,25,55,32,33,49,42,36,34,25,17,27,60,30,16,1,4,47,35,32,78,31,22,5,8,34,36,24,39,13,11,66,2,36,14,41,72,44,4,32,31,74,20,41,29,19,40,39,49,40,54,24,16,27,22,58,31,34,40,32,13,1,29,39,34,77,39,1,13,16,19,64,45,8,37,39,4,27,30,17,16,44,36,27,69,44,49,6,43,19,11,69,18,67,30,26,40,36,51,35,7,22,49,12,41,47,55,53,52,36,22,43,2,38,51,2,38,50,33,8,23,19,42,39,12,45,1,24,58,30,31,31,38,2,14,19,52,25,49,51,40,17,35,33,48,23,29,33,33,34,40,37,41,37,19,1,32,31,2,50,34,71,18,22,41,23,54,66,12,58,39,41,35,11,12,64,39,60,41,45,22,31,3,1,24,25,24,46,42,10,21,56,21,63,45,35,22,50,32,28,39,18,25],"text":["speechiness: 0.0278<br />popularity: 19","speechiness: 0.0407<br />popularity:  5","speechiness: 0.0304<br />popularity: 25","speechiness: 0.2550<br />popularity: 55","speechiness: 0.0854<br />popularity: 32","speechiness: 0.0401<br />popularity: 33","speechiness: 0.0482<br />popularity: 49","speechiness: 0.0492<br />popularity: 42","speechiness: 0.0762<br />popularity: 36","speechiness: 0.0388<br />popularity: 34","speechiness: 0.2660<br />popularity: 25","speechiness: 0.0465<br />popularity: 17","speechiness: 0.0395<br />popularity: 27","speechiness: 0.0560<br />popularity: 60","speechiness: 0.0532<br />popularity: 30","speechiness: 0.0558<br />popularity: 16","speechiness: 0.0276<br />popularity:  1","speechiness: 0.0514<br />popularity:  4","speechiness: 0.1670<br />popularity: 47","speechiness: 0.0351<br />popularity: 35","speechiness: 0.0299<br />popularity: 32","speechiness: 0.0569<br />popularity: 78","speechiness: 0.0383<br />popularity: 31","speechiness: 0.1470<br />popularity: 22","speechiness: 0.1520<br />popularity:  5","speechiness: 0.1210<br />popularity:  8","speechiness: 0.0553<br />popularity: 34","speechiness: 0.0245<br />popularity: 36","speechiness: 0.0325<br />popularity: 24","speechiness: 0.0424<br />popularity: 39","speechiness: 0.0252<br />popularity: 13","speechiness: 0.9330<br />popularity: 11","speechiness: 0.0400<br />popularity: 66","speechiness: 0.0389<br />popularity:  2","speechiness: 0.0448<br />popularity: 36","speechiness: 0.0520<br />popularity: 14","speechiness: 0.1360<br />popularity: 41","speechiness: 0.0668<br />popularity: 72","speechiness: 0.0304<br />popularity: 44","speechiness: 0.0677<br />popularity:  4","speechiness: 0.0322<br />popularity: 32","speechiness: 0.0885<br />popularity: 31","speechiness: 0.0252<br />popularity: 74","speechiness: 0.0469<br />popularity: 20","speechiness: 0.0361<br />popularity: 41","speechiness: 0.8940<br />popularity: 29","speechiness: 0.0912<br />popularity: 19","speechiness: 0.0953<br />popularity: 40","speechiness: 0.0281<br />popularity: 39","speechiness: 0.2770<br />popularity: 49","speechiness: 0.0286<br />popularity: 40","speechiness: 0.1250<br />popularity: 54","speechiness: 0.0785<br />popularity: 24","speechiness: 0.9630<br />popularity: 16","speechiness: 0.1090<br />popularity: 27","speechiness: 0.0558<br />popularity: 22","speechiness: 0.0509<br />popularity: 58","speechiness: 0.0469<br />popularity: 31","speechiness: 0.0302<br />popularity: 34","speechiness: 0.1690<br />popularity: 40","speechiness: 0.0500<br />popularity: 32","speechiness: 0.0374<br />popularity: 13","speechiness: 0.0406<br />popularity:  1","speechiness: 0.0301<br />popularity: 29","speechiness: 0.3210<br />popularity: 39","speechiness: 0.1950<br />popularity: 34","speechiness: 0.1670<br />popularity: 77","speechiness: 0.0423<br />popularity: 39","speechiness: 0.0365<br />popularity:  1","speechiness: 0.0310<br />popularity: 13","speechiness: 0.0368<br />popularity: 16","speechiness: 0.0608<br />popularity: 19","speechiness: 0.0390<br />popularity: 64","speechiness: 0.0464<br />popularity: 45","speechiness: 0.0499<br />popularity:  8","speechiness: 0.2130<br />popularity: 37","speechiness: 0.0471<br />popularity: 39","speechiness: 0.0600<br />popularity:  4","speechiness: 0.0691<br />popularity: 27","speechiness: 0.0440<br />popularity: 30","speechiness: 0.2660<br />popularity: 17","speechiness: 0.4100<br />popularity: 16","speechiness: 0.0494<br />popularity: 44","speechiness: 0.2500<br />popularity: 36","speechiness: 0.0295<br />popularity: 27","speechiness: 0.1800<br />popularity: 69","speechiness: 0.0439<br />popularity: 44","speechiness: 0.0465<br />popularity: 49","speechiness: 0.0548<br />popularity:  6","speechiness: 0.0335<br />popularity: 43","speechiness: 0.0341<br />popularity: 19","speechiness: 0.0608<br />popularity: 11","speechiness: 0.2010<br />popularity: 69","speechiness: 0.8990<br />popularity: 18","speechiness: 0.3780<br />popularity: 67","speechiness: 0.0384<br />popularity: 30","speechiness: 0.1000<br />popularity: 26","speechiness: 0.1980<br />popularity: 40","speechiness: 0.0383<br />popularity: 36","speechiness: 0.0346<br />popularity: 51","speechiness: 0.0915<br />popularity: 35","speechiness: 0.0424<br />popularity:  7","speechiness: 0.0542<br />popularity: 22","speechiness: 0.0929<br />popularity: 49","speechiness: 0.0237<br />popularity: 12","speechiness: 0.0585<br />popularity: 41","speechiness: 0.0532<br />popularity: 47","speechiness: 0.0387<br />popularity: 55","speechiness: 0.1100<br />popularity: 53","speechiness: 0.0335<br />popularity: 52","speechiness: 0.0853<br />popularity: 36","speechiness: 0.0885<br />popularity: 22","speechiness: 0.0270<br />popularity: 43","speechiness: 0.0351<br />popularity:  2","speechiness: 0.0356<br />popularity: 38","speechiness: 0.2600<br />popularity: 51","speechiness: 0.0393<br />popularity:  2","speechiness: 0.0903<br />popularity: 38","speechiness: 0.0454<br />popularity: 50","speechiness: 0.0491<br />popularity: 33","speechiness: 0.1430<br />popularity:  8","speechiness: 0.0368<br />popularity: 23","speechiness: 0.1320<br />popularity: 19","speechiness: 0.0302<br />popularity: 42","speechiness: 0.0427<br />popularity: 39","speechiness: 0.0685<br />popularity: 12","speechiness: 0.0349<br />popularity: 45","speechiness: 0.0385<br />popularity:  1","speechiness: 0.2180<br />popularity: 24","speechiness: 0.3250<br />popularity: 58","speechiness: 0.0514<br />popularity: 30","speechiness: 0.0636<br />popularity: 31","speechiness: 0.0754<br />popularity: 31","speechiness: 0.0337<br />popularity: 38","speechiness: 0.2640<br />popularity:  2","speechiness: 0.2520<br />popularity: 14","speechiness: 0.0370<br />popularity: 19","speechiness: 0.1520<br />popularity: 52","speechiness: 0.0250<br />popularity: 25","speechiness: 0.0496<br />popularity: 49","speechiness: 0.0893<br />popularity: 51","speechiness: 0.0477<br />popularity: 40","speechiness: 0.0545<br />popularity: 17","speechiness: 0.0418<br />popularity: 35","speechiness: 0.0739<br />popularity: 33","speechiness: 0.0639<br />popularity: 48","speechiness: 0.0407<br />popularity: 23","speechiness: 0.0273<br />popularity: 29","speechiness: 0.1860<br />popularity: 33","speechiness: 0.0292<br />popularity: 33","speechiness: 0.3810<br />popularity: 34","speechiness: 0.1090<br />popularity: 40","speechiness: 0.0412<br />popularity: 37","speechiness: 0.2490<br />popularity: 41","speechiness: 0.0273<br />popularity: 37","speechiness: 0.9600<br />popularity: 19","speechiness: 0.1980<br />popularity:  1","speechiness: 0.1600<br />popularity: 32","speechiness: 0.0292<br />popularity: 31","speechiness: 0.0330<br />popularity:  2","speechiness: 0.0700<br />popularity: 50","speechiness: 0.0373<br />popularity: 34","speechiness: 0.0365<br />popularity: 71","speechiness: 0.5900<br />popularity: 18","speechiness: 0.1700<br />popularity: 22","speechiness: 0.0279<br />popularity: 41","speechiness: 0.9410<br />popularity: 23","speechiness: 0.0306<br />popularity: 54","speechiness: 0.0534<br />popularity: 66","speechiness: 0.9340<br />popularity: 12","speechiness: 0.5300<br />popularity: 58","speechiness: 0.0565<br />popularity: 39","speechiness: 0.0386<br />popularity: 41","speechiness: 0.0682<br />popularity: 35","speechiness: 0.9220<br />popularity: 11","speechiness: 0.0409<br />popularity: 12","speechiness: 0.0381<br />popularity: 64","speechiness: 0.1670<br />popularity: 39","speechiness: 0.0430<br />popularity: 60","speechiness: 0.0394<br />popularity: 41","speechiness: 0.3690<br />popularity: 45","speechiness: 0.0353<br />popularity: 22","speechiness: 0.0275<br />popularity: 31","speechiness: 0.0327<br />popularity:  3","speechiness: 0.0528<br />popularity:  1","speechiness: 0.0413<br />popularity: 24","speechiness: 0.0375<br />popularity: 25","speechiness: 0.1750<br />popularity: 24","speechiness: 0.0270<br />popularity: 46","speechiness: 0.2370<br />popularity: 42","speechiness: 0.0566<br />popularity: 10","speechiness: 0.1140<br />popularity: 21","speechiness: 0.0975<br />popularity: 56","speechiness: 0.0423<br />popularity: 21","speechiness: 0.2440<br />popularity: 63","speechiness: 0.0954<br />popularity: 45","speechiness: 0.0337<br />popularity: 35","speechiness: 0.0943<br />popularity: 22","speechiness: 0.0252<br />popularity: 50","speechiness: 0.2050<br />popularity: 32","speechiness: 0.0558<br />popularity: 28","speechiness: 0.0359<br />popularity: 39","speechiness: 0.0404<br />popularity: 18","speechiness: 0.0353<br />popularity: 25"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(29,185,84,1)","opacity":0.5,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(29,185,84,1)"}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0.023699999999999999,0.035589873417721518,0.047479746835443037,0.059369620253164557,0.071259493670886076,0.083149367088607595,0.095039240506329115,0.10692911392405063,0.11881898734177215,0.13070886075949367,0.14259873417721519,0.15448860759493671,0.16637848101265823,0.17826835443037975,0.19015822784810127,0.20204810126582279,0.21393797468354431,0.22582784810126583,0.23771772151898735,0.24960759493670887,0.26149746835443038,0.2733873417721519,0.28527721518987342,0.29716708860759494,0.30905696202531646,0.32094683544303798,0.3328367088607595,0.34472658227848102,0.35661645569620254,0.36850632911392406,0.38039620253164558,0.3922860759493671,0.40417594936708862,0.41606582278481014,0.42795569620253165,0.43984556962025317,0.45173544303797469,0.46362531645569621,0.47551518987341773,0.48740506329113925,0.49929493670886077,0.51118481012658235,0.52307468354430386,0.53496455696202538,0.5468544303797469,0.55874430379746842,0.57063417721518994,0.58252405063291146,0.59441392405063298,0.6063037974683545,0.61819367088607602,0.63008354430379754,0.64197341772151906,0.65386329113924058,0.6657531645569621,0.67764303797468362,0.68953291139240513,0.70142278481012665,0.71331265822784817,0.72520253164556969,0.73709240506329121,0.74898227848101273,0.76087215189873425,0.77276202531645577,0.78465189873417729,0.79654177215189881,0.80843164556962033,0.82032151898734185,0.83221139240506337,0.84410126582278489,0.8559911392405064,0.86788101265822792,0.87977088607594944,0.89166075949367096,0.90355063291139248,0.915440506329114,0.92733037974683552,0.93922025316455704,0.95111012658227856,0.96299999999999997],"y":[32.487674232514301,31.503473361228071,31.100640156741232,31.335342292029743,32.148939639894678,32.74450562439965,32.977066565594995,33.094863276909109,33.346136571770316,33.79739250745854,34.211686977166821,34.591276126609017,34.946251576442236,35.28670494732355,35.622727859910064,35.964411934858873,36.321848792827076,36.705130054471745,37.124347340449972,37.579812657066611,38.012224452467208,38.410117254378335,38.773847069197423,39.10376990332189,39.400241763149175,39.663618655076696,39.894256585501886,40.092511560822182,40.258739587434995,40.393296671737772,40.496538820127931,40.568822039002896,40.610502334760106,40.621935713796994,40.603478182510962,40.555485747299457,40.478314414559904,40.372320190689742,40.237859082086395,40.075287095147274,39.884960236269826,39.667234511851461,39.422465928289633,39.151010491981758,38.853224209325255,38.529463086717556,38.180083130556106,37.805440347238317,37.405890743161621,36.981790324723448,36.533495098321225,36.061361070352376,35.56574424721434,35.047000635304535,34.5054862410204,33.941557070759352,33.35556913091883,32.747878427896246,32.118840968089046,31.468812757894653,30.798149803710487,30.107208111933989,29.396343688962578,28.665912541193688,27.916270675024744,27.147774096853173,26.360778813076411,25.555640830091885,24.732716154297005,23.892360792089228,23.034930749865964,22.160782034024638,21.270270650962694,20.363752607077554,19.441583908766631,18.504120562427381,17.551718574457212,16.584733951253561,15.603522699213858,14.60844082473553],"text":["speechiness: 0.02370000<br />popularity: 32.48767","speechiness: 0.03558987<br />popularity: 31.50347","speechiness: 0.04747975<br />popularity: 31.10064","speechiness: 0.05936962<br />popularity: 31.33534","speechiness: 0.07125949<br />popularity: 32.14894","speechiness: 0.08314937<br />popularity: 32.74451","speechiness: 0.09503924<br />popularity: 32.97707","speechiness: 0.10692911<br />popularity: 33.09486","speechiness: 0.11881899<br />popularity: 33.34614","speechiness: 0.13070886<br />popularity: 33.79739","speechiness: 0.14259873<br />popularity: 34.21169","speechiness: 0.15448861<br />popularity: 34.59128","speechiness: 0.16637848<br />popularity: 34.94625","speechiness: 0.17826835<br />popularity: 35.28670","speechiness: 0.19015823<br />popularity: 35.62273","speechiness: 0.20204810<br />popularity: 35.96441","speechiness: 0.21393797<br />popularity: 36.32185","speechiness: 0.22582785<br />popularity: 36.70513","speechiness: 0.23771772<br />popularity: 37.12435","speechiness: 0.24960759<br />popularity: 37.57981","speechiness: 0.26149747<br />popularity: 38.01222","speechiness: 0.27338734<br />popularity: 38.41012","speechiness: 0.28527722<br />popularity: 38.77385","speechiness: 0.29716709<br />popularity: 39.10377","speechiness: 0.30905696<br />popularity: 39.40024","speechiness: 0.32094684<br />popularity: 39.66362","speechiness: 0.33283671<br />popularity: 39.89426","speechiness: 0.34472658<br />popularity: 40.09251","speechiness: 0.35661646<br />popularity: 40.25874","speechiness: 0.36850633<br />popularity: 40.39330","speechiness: 0.38039620<br />popularity: 40.49654","speechiness: 0.39228608<br />popularity: 40.56882","speechiness: 0.40417595<br />popularity: 40.61050","speechiness: 0.41606582<br />popularity: 40.62194","speechiness: 0.42795570<br />popularity: 40.60348","speechiness: 0.43984557<br />popularity: 40.55549","speechiness: 0.45173544<br />popularity: 40.47831","speechiness: 0.46362532<br />popularity: 40.37232","speechiness: 0.47551519<br />popularity: 40.23786","speechiness: 0.48740506<br />popularity: 40.07529","speechiness: 0.49929494<br />popularity: 39.88496","speechiness: 0.51118481<br />popularity: 39.66723","speechiness: 0.52307468<br />popularity: 39.42247","speechiness: 0.53496456<br />popularity: 39.15101","speechiness: 0.54685443<br />popularity: 38.85322","speechiness: 0.55874430<br />popularity: 38.52946","speechiness: 0.57063418<br />popularity: 38.18008","speechiness: 0.58252405<br />popularity: 37.80544","speechiness: 0.59441392<br />popularity: 37.40589","speechiness: 0.60630380<br />popularity: 36.98179","speechiness: 0.61819367<br />popularity: 36.53350","speechiness: 0.63008354<br />popularity: 36.06136","speechiness: 0.64197342<br />popularity: 35.56574","speechiness: 0.65386329<br />popularity: 35.04700","speechiness: 0.66575316<br />popularity: 34.50549","speechiness: 0.67764304<br />popularity: 33.94156","speechiness: 0.68953291<br />popularity: 33.35557","speechiness: 0.70142278<br />popularity: 32.74788","speechiness: 0.71331266<br />popularity: 32.11884","speechiness: 0.72520253<br />popularity: 31.46881","speechiness: 0.73709241<br />popularity: 30.79815","speechiness: 0.74898228<br />popularity: 30.10721","speechiness: 0.76087215<br />popularity: 29.39634","speechiness: 0.77276203<br />popularity: 28.66591","speechiness: 0.78465190<br />popularity: 27.91627","speechiness: 0.79654177<br />popularity: 27.14777","speechiness: 0.80843165<br />popularity: 26.36078","speechiness: 0.82032152<br />popularity: 25.55564","speechiness: 0.83221139<br />popularity: 24.73272","speechiness: 0.84410127<br />popularity: 23.89236","speechiness: 0.85599114<br />popularity: 23.03493","speechiness: 0.86788101<br />popularity: 22.16078","speechiness: 0.87977089<br />popularity: 21.27027","speechiness: 0.89166076<br />popularity: 20.36375","speechiness: 0.90355063<br />popularity: 19.44158","speechiness: 0.91544051<br />popularity: 18.50412","speechiness: 0.92733038<br />popularity: 17.55172","speechiness: 0.93922025<br />popularity: 16.58473","speechiness: 0.95111013<br />popularity: 15.60352","speechiness: 0.96300000<br />popularity: 14.60844"],"type":"scatter","mode":"lines","name":"fitted values","line":{"width":3.7795275590551185,"color":"rgba(0,0,0,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826498,"l":37.260273972602747},"font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Speechiness vs Popularity","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-0.023265000000000008,1.009965],"tickmode":"array","ticktext":["0.00","0.25","0.50","0.75","1.00"],"tickvals":[0,0.24999999999999997,0.5,0.75,1],"categoryorder":"array","categoryarray":["0.00","0.25","0.50","0.75","1.00"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Speechiness","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-2.8500000000000001,81.849999999999994],"tickmode":"array","ticktext":["0","20","40","60","80"],"tickvals":[0,19.999999999999996,40,60.000000000000007,80],"categoryorder":"array","categoryarray":["0","20","40","60","80"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Popularity","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"1085a5ea0842f":{"x":{},"y":{},"type":"scatter"},"1085a7c465a31":{"x":{},"y":{}}},"cur_data":"1085a5ea0842f","visdat":{"1085a5ea0842f":["function (y) ","x"],"1085a7c465a31":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p><strong>Interpretation:</strong> The plot shows a clear downward
+trend: tracks with high speechiness values (e.g., ≥ 0.8) generally have
+lower popularity. This aligns with modeling results, where speechiness
+had one of the strongest negative coefficients in the linear
+regression.</p>
+<hr />
+</div>
+<div id="popularity-by-genre-interactive-boxplot"
+class="section level2">
+<h2>3. Popularity by Genre (Interactive Boxplot)</h2>
+<p>Genre was the most dominant predictor across all models and strongly
+influenced popularity.</p>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-c376d831c8c0517f9bcb" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-c376d831c8c0517f9bcb">{"x":{"data":[{"x":[1,1,1,1,1,1,1,1,1],"y":[64,49,55,31,50,31,36,56,72],"hoverinfo":"y","type":"box","fillcolor":"rgba(248,118,109,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Alternative","legendgroup":"Alternative","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[2,2,2,2,2,2,2,2,2,2,2,2],"y":[19,17,19,26,7,41,35,54,32,38,54,8],"hoverinfo":"y","type":"box","fillcolor":"rgba(237,129,65,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Anime","legendgroup":"Anime","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[3,3,3,3,3,3,3,3,3],"y":[39,46,29,19,30,34,11,35,36],"hoverinfo":"y","type":"box","fillcolor":"rgba(224,139,0,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Blues","legendgroup":"Blues","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[4,4,4],"y":[4,12,16],"hoverinfo":"y","type":"box","fillcolor":"rgba(207,148,0,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Children's Music","legendgroup":"Children's Music","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[5,5],"y":[1,34],"hoverinfo":"y","type":"box","fillcolor":"rgba(187,157,0,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Children’s Music","legendgroup":"Children’s Music","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[6,6,6,6,6,6,6,6,6,6,6,6,6],"y":[1,30,6,13,35,41,31,32,22,36,44,22,10],"hoverinfo":"y","type":"box","fillcolor":"rgba(163,165,0,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Classical","legendgroup":"Classical","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[7,7,7,7,7,7,7,7],"y":[23,12,29,11,18,19,18,16],"hoverinfo":"y","type":"box","fillcolor":"rgba(133,173,0,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Comedy","legendgroup":"Comedy","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8],"y":[36,25,19,43,37,23,28,71,13,39,58,33,39,24,44],"hoverinfo":"y","type":"box","fillcolor":"rgba(91,179,0,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Country","legendgroup":"Country","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[9,9,9,9,9,9,9,9,9,9,9,9],"y":[74,33,78,67,60,41,50,51,63,49,38,69],"hoverinfo":"y","type":"box","fillcolor":"rgba(0,184,32,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Dance","legendgroup":"Dance","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[10,10,10,10,10,10,10,10,10],"y":[32,31,41,53,33,24,48,22,25],"hoverinfo":"y","type":"box","fillcolor":"rgba(0,188,89,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Electronic","legendgroup":"Electronic","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[11,11,11,11,11,11,11,11],"y":[66,52,42,39,20,38,34,44],"hoverinfo":"y","type":"box","fillcolor":"rgba(0,191,125,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Folk","legendgroup":"Folk","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[12,12,12,12,12,12,12,12,12,12,12],"y":[66,55,39,77,41,42,51,49,58,41,58],"hoverinfo":"y","type":"box","fillcolor":"rgba(0,193,156,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Hip-Hop","legendgroup":"Hip-Hop","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[13,13,13,13,13],"y":[30,33,40,39,50],"hoverinfo":"y","type":"box","fillcolor":"rgba(0,192,184,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Jazz","legendgroup":"Jazz","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[14,14,14,14,14,14,14,14,14,14,14],"y":[23,13,3,8,45,8,45,42,27,16,2],"hoverinfo":"y","type":"box","fillcolor":"rgba(0,189,208,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Movie","legendgroup":"Movie","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[15,15,15,15,15,15],"y":[1,4,4,35,2,5],"hoverinfo":"y","type":"box","fillcolor":"rgba(0,184,229,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Opera","legendgroup":"Opera","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[16,16],"y":[64,1],"hoverinfo":"y","type":"box","fillcolor":"rgba(0,176,246,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Pop","legendgroup":"Pop","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[17,17,17,17,17,17,17],"y":[25,22,22,51,24,36,47],"hoverinfo":"y","type":"box","fillcolor":"rgba(0,165,255,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"R&B","legendgroup":"R&B","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[18],"y":[45],"hoverinfo":"y","type":"box","fillcolor":"rgba(121,151,255,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Rap","legendgroup":"Rap","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[19,19,19,19,19,19,19,19,19,19,19,19,19,19],"y":[31,37,39,31,40,25,39,34,37,52,24,60,40,32],"hoverinfo":"y","type":"box","fillcolor":"rgba(172,136,255,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Reggae","legendgroup":"Reggae","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[20,20,20,20,20,20,20,20,20,20,20,20,20,20],"y":[12,5,14,31,33,1,39,69,21,34,14,17,32,25],"hoverinfo":"y","type":"box","fillcolor":"rgba(207,120,255,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Reggaeton","legendgroup":"Reggaeton","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[21],"y":[49],"hoverinfo":"y","type":"box","fillcolor":"rgba(231,107,243,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Rock","legendgroup":"Rock","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[22,22,22,22,22,22,22,22,22,22,22,22],"y":[21,22,36,17,34,40,11,27,19,19,12,24],"hoverinfo":"y","type":"box","fillcolor":"rgba(247,99,224,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Ska","legendgroup":"Ska","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[23,23,23,23,23,23,23],"y":[40,2,43,49,2,40,45],"hoverinfo":"y","type":"box","fillcolor":"rgba(255,97,201,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Soul","legendgroup":"Soul","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[24,24,24,24,24,24],"y":[2,29,32,41,47,18],"hoverinfo":"y","type":"box","fillcolor":"rgba(255,101,174,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Soundtrack","legendgroup":"Soundtrack","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[25,25,25,25,25,25,25],"y":[27,22,27,1,16,30,35],"hoverinfo":"y","type":"box","fillcolor":"rgba(255,108,144,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"World","legendgroup":"World","showlegend":true,"xaxis":"x","yaxis":"y","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":78.001461475914198,"l":37.260273972602747},"font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Popularity by Genre","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.40000000000000002,25.600000000000001],"tickmode":"array","ticktext":["Alternative","Anime","Blues","Children's Music","Children’s Music","Classical","Comedy","Country","Dance","Electronic","Folk","Hip-Hop","Jazz","Movie","Opera","Pop","R&B","Rap","Reggae","Reggaeton","Rock","Ska","Soul","Soundtrack","World"],"tickvals":[1,2,3,4,5,6,7,7.9999999999999991,9,10,11,12,13,14.000000000000002,15,16,17,18,19,20,21,22,23,24,25],"categoryorder":"array","categoryarray":["Alternative","Anime","Blues","Children's Music","Children’s Music","Classical","Comedy","Country","Dance","Electronic","Folk","Hip-Hop","Jazz","Movie","Opera","Pop","R&B","Rap","Reggae","Reggaeton","Rock","Ska","Soul","Soundtrack","World"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-45,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Genre","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-2.8500000000000001,81.849999999999994],"tickmode":"array","ticktext":["0","20","40","60","80"],"tickvals":[0,19.999999999999996,40,60.000000000000007,80],"categoryorder":"array","categoryarray":["0","20","40","60","80"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Popularity","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"1085a6fc978e5":{"x":{},"y":{},"fill":{},"type":"box"}},"cur_data":"1085a6fc978e5","visdat":{"1085a6fc978e5":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p><strong>Interpretation:</strong> This boxplot confirms that genre
+plays a crucial role in a track’s popularity. Genres such as
+Alternative, Hip-Hop, and Electronic tend to show higher popularity,
+while Children’s Music, Opera, and Classical are associated with lower
+popularity — matching results from both linear regression and the
+regression tree.</p>
+<hr />
+</div>
+<div id="popularity-by-acousticness-level-boxplot"
+class="section level2">
+<h2>4. Popularity by Acousticness Level (Boxplot)</h2>
+<p>Acousticness was the first splitting variable in the regression tree,
+suggesting a fundamental split in track type.</p>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-b8650c798b276671547f" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-b8650c798b276671547f">{"x":{"data":[{"x":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],"y":[39,31,44,20,16,44,34,27,45,32,4,1,39,30,13,4,32,11,22,18,31,29,23,32,6,12,35,27,41,18,29,1,13,10,11,41,2,22,22,35,4,8,30,8,5,18,25],"hoverinfo":"y","type":"box","fillcolor":"rgba(248,118,109,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"High Acousticness","legendgroup":"High Acousticness","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],"y":[19,31,25,55,32,33,49,42,36,49,25,17,24,60,30,30,1,40,47,35,35,78,17,22,5,34,34,36,24,52,13,19,66,45,36,14,41,72,44,33,17,16,74,36,41,69,19,40,39,43,40,54,69,16,27,14,58,52,34,40,51,7,31,29,39,41,77,39,53,33,16,22,64,2,8,37,2,38,27,2,50,23,19,42,39,12,51,49,24,58,19,11,31,38,67,12,26,39,36,43,45,40,51,49,12,48,47,55,33,42,36,40,41,41,38,66,1,32,50,32,28,34,71,19,22,25,49,1,37,19,58,31,24,35,2,46,21,34,21,37,33,54,63,3,39,31,23,24,60,56,64,50,45,22,39,1,25],"hoverinfo":"y","type":"box","fillcolor":"rgba(0,191,196,0.7)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"name":"Low Acousticness","legendgroup":"Low Acousticness","showlegend":true,"xaxis":"x","yaxis":"y","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826498,"l":37.260273972602747},"font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Popularity by Acousticness Group","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.40000000000000002,2.6000000000000001],"tickmode":"array","ticktext":["High Acousticness","Low Acousticness"],"tickvals":[1,2],"categoryorder":"array","categoryarray":["High Acousticness","Low Acousticness"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Acousticness Group","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-2.8500000000000001,81.849999999999994],"tickmode":"array","ticktext":["0","20","40","60","80"],"tickvals":[0,19.999999999999996,40,60.000000000000007,80],"categoryorder":"array","categoryarray":["0","20","40","60","80"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Popularity","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"high_acoustic","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"1085a7d1e8ae7":{"x":{},"y":{},"fill":{},"type":"box"}},"cur_data":"1085a7d1e8ae7","visdat":{"1085a7d1e8ae7":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p><strong>Interpretation:</strong> Tracks with low acousticness tend to
+be more popular, as shown by the higher median and wider distribution of
+popularity scores. This confirms the first split in the regression tree,
+where acousticness separated the data early on.</p>
+<hr />
+</div>
+<div id="interactive-spearman-correlation-heatmap"
+class="section level2">
+<h2>5. Interactive Spearman Correlation Heatmap</h2>
+<p>This heatmap provides a holistic view of monotonic relationships
+between numeric audio features and popularity.</p>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-d3eca33cca15e928718b" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-d3eca33cca15e928718b">{"x":{"visdat":{"1085a5de2649c":["function () ","plotlyVisDat"]},"cur_data":"1085a5de2649c","attrs":{"1085a5de2649c":{"x":{},"y":{},"z":{},"colorscale":"RdBu","zmin":-1,"zmax":1,"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"heatmap"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Interactive Spearman Correlation Heatmap of Audio Features","xaxis":{"domain":[0,1],"automargin":true,"tickangle":45,"title":"Var2","type":"category","categoryorder":"array","categoryarray":["danceability","energy","valence","acousticness","instrumentalness","liveness","loudness","speechiness","tempo","popularity"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"","type":"category","categoryorder":"array","categoryarray":["danceability","energy","valence","acousticness","instrumentalness","liveness","loudness","speechiness","tempo","popularity"]},"scene":{"zaxis":{"title":"value"}},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"colorbar":{"title":"value","ticklen":2,"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"colorscale":"RdBu","showscale":true,"x":["danceability","danceability","danceability","danceability","danceability","danceability","danceability","danceability","danceability","danceability","energy","energy","energy","energy","energy","energy","energy","energy","energy","energy","valence","valence","valence","valence","valence","valence","valence","valence","valence","valence","acousticness","acousticness","acousticness","acousticness","acousticness","acousticness","acousticness","acousticness","acousticness","acousticness","instrumentalness","instrumentalness","instrumentalness","instrumentalness","instrumentalness","instrumentalness","instrumentalness","instrumentalness","instrumentalness","instrumentalness","liveness","liveness","liveness","liveness","liveness","liveness","liveness","liveness","liveness","liveness","loudness","loudness","loudness","loudness","loudness","loudness","loudness","loudness","loudness","loudness","speechiness","speechiness","speechiness","speechiness","speechiness","speechiness","speechiness","speechiness","speechiness","speechiness","tempo","tempo","tempo","tempo","tempo","tempo","tempo","tempo","tempo","tempo","popularity","popularity","popularity","popularity","popularity","popularity","popularity","popularity","popularity","popularity"],"y":["danceability","energy","valence","acousticness","instrumentalness","liveness","loudness","speechiness","tempo","popularity","danceability","energy","valence","acousticness","instrumentalness","liveness","loudness","speechiness","tempo","popularity","danceability","energy","valence","acousticness","instrumentalness","liveness","loudness","speechiness","tempo","popularity","danceability","energy","valence","acousticness","instrumentalness","liveness","loudness","speechiness","tempo","popularity","danceability","energy","valence","acousticness","instrumentalness","liveness","loudness","speechiness","tempo","popularity","danceability","energy","valence","acousticness","instrumentalness","liveness","loudness","speechiness","tempo","popularity","danceability","energy","valence","acousticness","instrumentalness","liveness","loudness","speechiness","tempo","popularity","danceability","energy","valence","acousticness","instrumentalness","liveness","loudness","speechiness","tempo","popularity","danceability","energy","valence","acousticness","instrumentalness","liveness","loudness","speechiness","tempo","popularity","danceability","energy","valence","acousticness","instrumentalness","liveness","loudness","speechiness","tempo","popularity"],"z":[1,0.21382906355387926,0.53641058552236831,-0.26148591583319897,-0.31885027120051851,-0.18863406418050183,0.26694798459952668,0.30552573344172851,0.038642253919185347,0.16390246192037486,0.21382906355387926,1,0.41926707402762398,-0.7407506616210533,-0.35604401626578397,0.12657930376757451,0.81113773644926579,0.29867172904499167,0.31366507586542752,0.14122292643899584,0.53641058552236831,0.41926707402762398,1,-0.37670834473597636,-0.25194680893871474,-0.055550431377968841,0.37736943211100754,0.23513106067938766,0.22076165262293576,0.088713676998343288,-0.26148591583319897,-0.7407506616210533,-0.37670834473597636,1,0.29568788972350829,0.0084456731455246434,-0.67129572041787633,-0.12592595734410034,-0.28578597149746154,-0.19947721671124014,-0.31885027120051851,-0.35604401626578397,-0.25194680893871474,0.29568788972350829,1,-0.14201484453785365,-0.4321336793170204,-0.35065655189979211,-0.10167822811562917,-0.14752373951377376,-0.18863406418050183,0.12657930376757451,-0.055550431377968841,0.0084456731455246434,-0.14201484453785365,1,-0.036210053307386109,0.13889257008813813,-0.087390330101430519,-0.042265749923642709,0.26694798459952668,0.81113773644926579,0.37736943211100754,-0.67129572041787633,-0.4321336793170204,-0.036210053307386109,1,0.17499310901757148,0.31454907315536501,0.22415322381814853,0.30552573344172851,0.29867172904499167,0.23513106067938766,-0.12592595734410034,-0.35065655189979211,0.13889257008813813,0.17499310901757148,1,0.0034953222547886745,0.015449862684459763,0.038642253919185347,0.31366507586542752,0.22076165262293576,-0.28578597149746154,-0.10167822811562917,-0.087390330101430519,0.31454907315536501,0.0034953222547886745,1,0.18943373353888443,0.16390246192037486,0.14122292643899584,0.088713676998343288,-0.19947721671124014,-0.14752373951377376,-0.042265749923642709,0.22415322381814853,0.015449862684459763,0.18943373353888443,1],"zmin":-1,"zmax":1,"type":"heatmap","xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p><strong>Interpretation:</strong> The heatmap confirms that most
+individual features have only weak monotonic correlations with
+popularity. This underscores the need for multivariate models to detect
+interactions and nonlinear effects.</p>
+<hr />
+</div>
+</div>
+<div id="summary" class="section level1">
+<h1>Summary</h1>
+<p>The visualizations reinforce key findings from the modeling analysis.
+<strong>Genre</strong> stood out as the most influential feature, while
+<strong>speechiness</strong>, <strong>tempo</strong>, and
+<strong>acousticness</strong> showed moderate associations with
+popularity. These plots not only validate model insights but also offer
+intuitive ways to explore how different features affect listener
+preferences on Spotify.</p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

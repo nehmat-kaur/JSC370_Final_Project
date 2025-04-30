@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<style>body{background-color:white;}</style>
+<script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="lib/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="lib/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="lib/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="lib/kePrint-0.0.1/kePrint.js"></script>
+<link href="lib/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+</head>
+<body>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>Cross-Validation Results for Random Forest</caption>
+ <thead>
+  <tr>
+   <th style="text-align:right;"> mtry </th>
+   <th style="text-align:right;"> RMSE </th>
+   <th style="text-align:right;"> Rsquared </th>
+   <th style="text-align:right;"> MAE </th>
+   <th style="text-align:right;"> RMSESD </th>
+   <th style="text-align:right;"> RsquaredSD </th>
+   <th style="text-align:right;"> MAESD </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:right;"> 15.15206 </td>
+   <td style="text-align:right;"> 0.1457952 </td>
+   <td style="text-align:right;"> 12.32024 </td>
+   <td style="text-align:right;"> 1.541014 </td>
+   <td style="text-align:right;"> 0.0351827 </td>
+   <td style="text-align:right;"> 1.2222666 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 9 </td>
+   <td style="text-align:right;"> 15.85867 </td>
+   <td style="text-align:right;"> 0.0709314 </td>
+   <td style="text-align:right;"> 12.83007 </td>
+   <td style="text-align:right;"> 1.252749 </td>
+   <td style="text-align:right;"> 0.0312544 </td>
+   <td style="text-align:right;"> 1.0233129 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 17 </td>
+   <td style="text-align:right;"> 16.13096 </td>
+   <td style="text-align:right;"> 0.0540812 </td>
+   <td style="text-align:right;"> 13.02352 </td>
+   <td style="text-align:right;"> 1.212213 </td>
+   <td style="text-align:right;"> 0.0276524 </td>
+   <td style="text-align:right;"> 0.9081943 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 25 </td>
+   <td style="text-align:right;"> 16.19829 </td>
+   <td style="text-align:right;"> 0.0557225 </td>
+   <td style="text-align:right;"> 13.05223 </td>
+   <td style="text-align:right;"> 1.104523 </td>
+   <td style="text-align:right;"> 0.0283430 </td>
+   <td style="text-align:right;"> 0.9198491 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 33 </td>
+   <td style="text-align:right;"> 16.11543 </td>
+   <td style="text-align:right;"> 0.0622790 </td>
+   <td style="text-align:right;"> 12.96749 </td>
+   <td style="text-align:right;"> 1.209640 </td>
+   <td style="text-align:right;"> 0.0339101 </td>
+   <td style="text-align:right;"> 0.9715313 </td>
+  </tr>
+</tbody>
+</table> <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [["$","$"]]}})</script><script async src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

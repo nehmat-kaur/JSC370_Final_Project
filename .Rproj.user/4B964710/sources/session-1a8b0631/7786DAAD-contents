@@ -1,0 +1,285 @@
+---
+title: "Spotify Popularity & Audio Features"
+author: "Harnehmat Kaur (1008882648)"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE, warning=FALSE, results="hide"}
+library(readr)
+library(httr)
+library(jsonlite)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+```
+
+## Introduction
+
+This project explores the relationship between the audio characteristics of songs and their popularity on Spotify. Using the Spotify Web API, I collect data on various features such as danceability, energy, valence, and tempo to answer the following question: **What audio features are most predictive of a song's popularity?**
+
+Understanding these relationships can provide insights into trends in music preferences and help artists or producers tailor songs for broader reach.
+
+## Methods
+
+The final dataset being used is built by merging two datasets together:
+
+- An open-source dataset of Spotify track audio features collected from Kaggle (Spotify Tracks Dataset - Maharshi Pandya)
+- Real-time Spotify API data, used to retrieve updated popularity scores for each track
+
+
+### Data Collection
+The Kaggle dataset SpotifyFeatures.csv provides:
+- Audio features such as danceability, energy, valence, loudness, tempo, and duration_ms
+- Metadata including track_id, track_name, artist_name, and genre
+
+The Spotify API was used to fetch current popularity for a sample of tracks.
+
+```{r, message=FALSE, warning=FALSE, results="hide"}
+spotify_raw <- read_csv("SpotifyFeatures.csv")
+
+set.seed(2025)  # for reproducibility
+spotify_df <- spotify_raw %>%
+  select(track_id, track_name, artist_name, genre,
+         danceability, energy, valence, acousticness,
+         instrumentalness, liveness, loudness, speechiness,
+         tempo, duration_ms) %>%
+  distinct(track_id, .keep_all = TRUE) %>%
+  sample_n(300) 
+
+dim(spotify_df)
+head(spotify_df)
+```
+
+
+
+```{r, message=FALSE, warning=FALSE, results="hide"}
+# Spotify Token Setup 
+client_id <- "b254fcf60d234f3c98efa70ebeadcf3a"
+client_secret <- "215958f394b842c1b1c70cf5c82ba08a"
+
+auth_response <- POST(
+  url = "https://accounts.spotify.com/api/token",
+  accept_json(),
+  authenticate(client_id, client_secret),
+  body = list(grant_type = "client_credentials"),
+  encode = "form"
+)
+
+access_token <- content(auth_response)$access_token
+print(access_token) 
+
+```
+
+```{r, message=FALSE, warning=FALSE, results="hide"}
+# Get popularity for each track
+spotify_df$popularity <- NA  # add empty column
+
+for (i in 1:nrow(spotify_df)) {
+  id <- spotify_df$track_id[i]
+  Sys.sleep(0.2)  # to avoid rate limits
+  
+  track_url <- paste0("https://api.spotify.com/v1/tracks/", id)
+  resp <- GET(track_url, add_headers(Authorization = paste("Bearer", access_token)))
+  
+  if (status_code(resp) == 200) {
+    track_data <- content(resp, as = "parsed", simplifyVector = TRUE)
+    spotify_df$popularity[i] <- track_data$popularity
+  } else {
+    spotify_df$popularity[i] <- NA
+  }
+}
+
+summary(spotify_df$popularity)
+
+```
+
+```{r, message=FALSE, warning=FALSE, results="hide"}
+head(spotify_df)
+```
+
+### Data Wrangling
+
+The dataset required some minor wrangling:
+
+- Removing tracks with missing `popularity`
+- Creating `duration_min` as `duration_ms / 60000`
+- Removing duplicates if any
+- Removing tracks with duration more than 15 minutes (podcasts)
+
+These preprocessing steps ensured that the final dataset focuses on typical music tracks suitable for examining the relationship between audio features and track popularity.
+
+```{r, message=FALSE, warning=FALSE, results="hide"}
+spotify_df <- spotify_df %>%
+  filter(!is.na(popularity)) %>%
+  mutate(duration_min = duration_ms / 60000) %>%
+  distinct()
+
+summary(spotify_df)
+
+```
+
+```{r, message=FALSE, warning=FALSE, results="hide"}
+# Remove tracks longer than 15 minutes (podcasts)
+spotify_df <- spotify_df %>%
+  filter(duration_min <= 15)
+
+summary(spotify_df$duration_min)
+```
+
+
+
+### Exploratory Data Analysis
+
+The following section provides visual and numerical summaries of the cleaned dataset to explore the distribution and relationships among the variables.
+
+
+```{r}
+# Summary Table
+spotify_df %>%
+  select(Popularity = popularity,
+         Danceability = danceability,
+         Energy = energy,
+         Valence = valence,
+         Acousticness = acousticness,
+         Instrumentalness = instrumentalness,
+         Liveness = liveness,
+         Loudness = loudness,
+         Speechiness = speechiness,
+         Tempo = tempo,
+         Duration_Minutes = duration_min) %>%
+  summary() %>%
+  kable(caption = "Table 1: Summary Statistics of Audio Features and Popularity") %>%
+  kable_styling(full_width = FALSE)
+```
+
+```{r}
+# Pairwise Scatterplots with labels
+pairs(~ popularity + danceability + energy + valence + acousticness + instrumentalness + liveness + loudness + speechiness + tempo + duration_min,
+      data = spotify_df,
+      main = "Figure 1: Pairwise Scatterplots of Audio Features and Popularity")
+```
+
+```{r}
+# Popularity vs. Danceability
+ggplot(spotify_df, aes(x = danceability, y = popularity)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", color = "blue") +
+  labs(
+    title = "Figure 2: Relationship Between Danceability and Popularity",
+    x = "Danceability",
+    y = "Popularity"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Popularity vs. Valence
+ggplot(spotify_df, aes(x = valence, y = popularity)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", color = "blue") +
+  labs(
+    title = "Figure 3: Relationship Between Valence and Popularity",
+    x = "Valence",
+    y = "Popularity"
+  ) +
+  theme_minimal()
+
+```
+
+```{r}
+# Popularity vs. Energy
+ggplot(spotify_df, aes(x = energy, y = popularity)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", color = "blue") +
+  labs(
+    title = "Figure 4: Relationship Between Energy and Popularity",
+    x = "Energy",
+    y = "Popularity"
+  ) +
+  theme_minimal()
+
+```
+
+**Inferences:**
+- The scatterplot matrix suggests low to moderate relationships between popularity and various audio features. 
+- The relationship between danceability and popularity appears weakly positive, with a slight trend indicating that tracks with higher danceability may tend to have higher popularity. 
+- Similarly, valence (a measure of positivity) shows a positive but modest relationship with popularity, suggesting that more positive-sounding tracks might be more popular on average. 
+- Energy also demonstrates a weakly positive association with popularity. However, in all cases, there is substantial variability and a large number of tracks with low popularity, regardless of feature values.
+- The pairwise plots additionally confirm that several audio features (such as speechiness, instrumentalness, and liveness) display little to no clear linear relationship with popularity. The patterns observed justify the use of multiple regression to examine how these variables jointly predict track popularity.
+
+
+### Modeling
+
+To formally assess the relationship between audio features and track popularity, a multiple linear regression model was fitted with `popularity` as the response variable and the available audio features as predictors.
+
+
+```{r, message=FALSE, warning=FALSE, results="hide"}
+# Fit the model
+model <- lm(popularity ~ danceability + energy + valence + acousticness +
+              instrumentalness + liveness + loudness + speechiness +
+              tempo + duration_min, data = spotify_df)
+
+summary(model)
+
+```
+
+```{r}
+# Creating a nice table of coefficients
+coef_table <- summary(model)$coefficients %>%
+  as.data.frame() %>%
+  tibble::rownames_to_column("Variable")
+
+coef_table %>%
+  kable(caption = "Table 2: Regression Coefficients for Predicting Track Popularity") %>%
+  kable_styling(full_width = FALSE)
+
+```
+
+
+### Preliminary Results
+
+The multiple linear regression model accounts for approximately 10.4% of the variation in track popularity (*Adjusted R²* = 7.3%). The results indicate that:
+
+- **Speechiness** has a statistically significant negative association with popularity (*p* = 0.0328), suggesting that tracks with more spoken content tend to be less popular.
+- **Tempo** is positively associated with popularity (*p* = 0.0136), indicating that faster tracks tend to have slightly higher popularity.
+- **Duration** shows a marginally significant effect (*p* = 0.0690), implying that longer tracks may exhibit mildly higher popularity.
+
+Interestingly, features that initially appeared to have positive associations with popularity in the exploratory analysis, such as **danceability**, **energy**, and **valence**, were not statistically significant in the regression model. This discrepancy can likely be attributed to **multicollinearity** — where features are correlated with each other — causing their individual effects to diminish when included together in the regression. This highlights the importance of multivariate analysis, as simple pairwise relationships observed in the EDA do not necessarily translate into significant predictors when considering the joint effect of multiple variables.
+
+### Model Diagnostics
+
+To check the model assumptions, diagnostic plots were generated.
+
+
+```{r}
+# Diagnostic plots
+par(mfrow = c(2, 2))
+plot(model)
+par(mfrow = c(1, 1))
+```
+
+## Conclusion
+
+This analysis explored the relationship between Spotify audio features and track popularity by combining an open-source Kaggle dataset with real-time Spotify API data. The data cleaning process focused on selecting music tracks, excluding podcasts and tracks with missing information, and preparing the dataset for analysis.
+
+The exploratory data analysis revealed weak positive trends between popularity and features such as danceability, valence, and energy. However, the multiple regression model suggested that **speechiness** and **tempo** were the only statistically significant predictors of popularity, with speechiness showing a negative association and tempo showing a positive association. This apparent discrepancy between EDA and modeling highlights the effect of multicollinearity among audio features, where simple pairwise patterns may not hold in a multivariate context.
+
+The model explained approximately 7% of the variation in popularity, suggesting that while audio characteristics contribute modestly to track popularity, additional factors beyond audio content—such as marketing, artist reputation, playlist placement, and social trends—likely play a substantial role. Further modeling efforts could explore interaction effects, non-linear relationships, or alternative modeling frameworks to improve explanatory power.
+
+
+## Bibliography
+
+- Maharshi Pandya. Spotify Tracks Dataset. Kaggle. Retrieved from: https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset
+
+- Spotify for Developers. Web API Reference. Retrieved from: https://developer.spotify.com/documentation/web-api
+
+
+
+
+```
+```

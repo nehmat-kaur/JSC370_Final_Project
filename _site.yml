@@ -1,0 +1,25 @@
+name: "JSC370_Final_Project"
+output_dir: "."
+navbar:
+  title: "Spotify Track Popularity Analysis"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Visualizations"
+      href: visualizations.html
+    - text: "Data Sources"
+      menu:
+        - text: "Kaggle Dataset"
+          href: https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset
+        - text: "Spotify API"
+          href: https://developer.spotify.com/documentation/web-api
+    - text: "Report"
+      href: report.pdf
+    - text: "Demonstration"
+      href: https://drive.google.com/file/d/VIDEO_ID/view?usp=sharing
+
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly

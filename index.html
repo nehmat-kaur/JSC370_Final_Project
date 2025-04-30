@@ -1,0 +1,1703 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Harnehmat Kaur (1008882648)" />
+
+<meta name="date" content="2025-04-30" />
+
+<title>Spotify Track Popularity Analysis</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Spotify Track Popularity Analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="visualizations.html">Visualizations</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Data Sources
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset">Kaggle Dataset</a>
+    </li>
+    <li>
+      <a href="https://developer.spotify.com/documentation/web-api">Spotify API</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="report.pdf">Report</a>
+</li>
+<li>
+  <a href="https://drive.google.com/file/d/VIDEO_ID/view?usp=sharing">Demonstration</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Spotify Track Popularity Analysis</h1>
+<h4 class="author">Harnehmat Kaur (1008882648)</h4>
+<h4 class="date">2025-04-30</h4>
+
+</div>
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>In today’s music industry, achieving popularity on platforms like
+Spotify can make or break an artist’s career. But what makes a song go
+viral? Is it the energy of the track, the positivity of the sound, or
+the tempo that keeps listeners hooked?</p>
+<p>This project explores the relationship between the audio
+characteristics of songs and their popularity on Spotify. Using a
+combination of an open-source Kaggle dataset and real-time Spotify API
+data, the aim is to answer a central research question: <strong>What
+audio features are most predictive of a song’s popularity?</strong></p>
+<p>Understanding these relationships can provide valuable insights for
+artists, producers, and marketers aiming to optimize music for broader
+audience reach. It also sheds light on broader patterns in listener
+behavior — what kinds of sounds dominate global music trends, and
+why.</p>
+<p>By analyzing features such as danceability, energy, valence, tempo,
+and others, this project seeks to uncover which aspects of a track’s
+audio profile are most strongly associated with listener appeal and
+commercial success.</p>
+<hr />
+</div>
+<div id="methods" class="section level1">
+<h1>Methods</h1>
+<div id="data-sources" class="section level2">
+<h2>Data Sources</h2>
+<p>Two datasets were combined:</p>
+<ul>
+<li><p><strong>Kaggle Dataset</strong>: An open-source dataset
+containing track metadata and audio features (e.g., danceability,
+energy, valence, tempo, loudness, etc.).</p></li>
+<li><p><strong>Spotify API</strong>: Used to fetch up-to-date popularity
+scores for a random sample of tracks.</p></li>
+</ul>
+<p>The Kaggle dataset provided static metadata and feature measurements,
+while the API allowed access to current popularity scores for
+analysis.</p>
+</div>
+<div id="data-preprocessing" class="section level2">
+<h2>Data Preprocessing</h2>
+<p>The data were cleaned and prepared as follows:</p>
+<ul>
+<li><p><strong>Filtering</strong>: Tracks with a <code>popularity</code>
+score of 0 were removed (32% of the sample). These tracks likely
+represent newly released or highly obscure songs with no measurable play
+count and could bias the analysis if retained.</p></li>
+<li><p><strong>Feature Engineering</strong>: Track duration was
+converted from milliseconds to minutes. Genre was converted to factor
+type to help with modeling.</p></li>
+<li><p><strong>Cleaning</strong>: Duplicate tracks were removed, and
+tracks longer than 15 minutes (likely podcasts) were excluded to focus
+the analysis on typical music tracks.</p></li>
+</ul>
+<p>The final dataset consisted of tracks with nonzero popularity scores
+and typical audio feature measurements.</p>
+</div>
+<div id="variables-description" class="section level2">
+<h2>Variables Description</h2>
+<p>Key audio features analyzed:</p>
+<ul>
+<li><p><strong>Genre</strong>: Genre of the song (Hip-hop, electronic,
+jazz etc).</p></li>
+<li><p><strong>Danceability</strong>: How suitable a track is for
+dancing (0–1 scale).</p></li>
+<li><p><strong>Energy</strong>: Intensity and activity level of a
+track.</p></li>
+<li><p><strong>Valence</strong>: Positivity conveyed by a track (0 =
+sad, 1 = happy).</p></li>
+<li><p><strong>Tempo</strong>: Speed or pace of a track (beats per
+minute).</p></li>
+<li><p><strong>Loudness</strong>: Average decibel level across the
+track.</p></li>
+<li><p><strong>Speechiness</strong>: Presence of spoken words in a
+track.</p></li>
+<li><p><strong>Acousticness</strong>: Likelihood that the track is
+acoustic.</p></li>
+<li><p><strong>Instrumentalness</strong>: Likelihood that a track has no
+vocals.</p></li>
+<li><p><strong>Liveness</strong>: Likelihood that the track was recorded
+live.</p></li>
+</ul>
+<p>The artist’s name and duration of the song have been excluded from
+the variables of interest, because the column ‘artist_name’ has too many
+different values to gain any valuable insights (high cardinality might
+lead to overfitting) and the duration of a song might not be very
+relevant in assessing it’s popularity.</p>
+<hr />
+</div>
+</div>
+<div id="spearman-correlation-heatmap" class="section level1">
+<h1>Spearman Correlation Heatmap</h1>
+<p>Since some audio features may not be normally distributed and the
+relationships could be monotonic but nonlinear, a Spearman correlation
+heatmap was constructed to better explore the strength and direction of
+associations between variables.</p>
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>The heatmap highlights notable relationships among features. For
+example, <strong>danceability</strong> and <strong>valence</strong> show
+a moderate positive correlation, while <strong>acousticness</strong> and
+<strong>loudness</strong> exhibit a negative association. Popularity is
+modestly correlated with features like <strong>speechiness</strong> and
+<strong>tempo</strong>, but overall correlations remain relatively weak,
+reinforcing the complexity of predicting track success based solely on
+audio characteristics.</p>
+<hr />
+</div>
+<div id="train-test-split-for-model-evaluation" class="section level1">
+<h1>Train-Test Split for Model Evaluation</h1>
+<div id="for-linear-regression" class="section level2">
+<h2>For Linear Regression</h2>
+<p>The dataset was first split into a training set and a test set for
+fitting and evaluating the linear regression model. No separate
+validation set was needed as linear regression does not involve
+hyperparameter tuning. The dataset was split into:</p>
+<ul>
+<li><p>70% training data</p></li>
+<li><p>30% test data.</p></li>
+</ul>
+</div>
+<div id="for-tree-based-models" class="section level2">
+<h2>For Tree-Based Models</h2>
+<p>For tree-based models, a three-way split was used: training set for
+fitting, validation set for tuning, and test set for final evaluation.
+This ensures that the final evaluation is unbiased by the tuning
+process. The data was split into:</p>
+<ul>
+<li><p>60% training data</p></li>
+<li><p>20% validation data</p></li>
+<li><p>20% test data.</p></li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="linear-regression-model" class="section level1">
+<h1>Linear Regression Model</h1>
+<p>A multiple linear regression model was fitted using the training set
+and evaluated on the test set to assess its predictive performance.</p>
+<div id="why-linear-regression" class="section level3">
+<h3>Why Linear Regression?</h3>
+<p>Linear regression was chosen as a baseline model due to its
+interpretability and simplicity. It tests for linear associations
+between audio features (predictors) and track popularity (response).</p>
+</div>
+<div id="assumptions" class="section level3">
+<h3>Assumptions:</h3>
+<ul>
+<li>Linearity between predictors and the outcome</li>
+<li>Independence of errors</li>
+<li>Homoscedasticity (constant variance of errors)</li>
+<li>Normal distribution of residuals</li>
+</ul>
+</div>
+<div id="limitations" class="section level3">
+<h3>Limitations:</h3>
+<p>The true relationship between audio features and popularity may not
+be linear. If interactions or nonlinear effects exist, linear regression
+will miss them, leading to underfitting.</p>
+<pre><code>## Test RMSE (Linear Regression): 17.04</code></pre>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Table: Linear Regression Coefficients for Predicting Track Popularity
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+45.917
+</td>
+<td style="text-align:right;">
+15.709
+</td>
+<td style="text-align:right;">
+2.92
+</td>
+<td style="text-align:right;">
+0.0042
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+danceability
+</td>
+<td style="text-align:right;">
+-3.968
+</td>
+<td style="text-align:right;">
+12.024
+</td>
+<td style="text-align:right;">
+-0.33
+</td>
+<td style="text-align:right;">
+0.7420
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+energy
+</td>
+<td style="text-align:right;">
+-4.656
+</td>
+<td style="text-align:right;">
+12.270
+</td>
+<td style="text-align:right;">
+-0.38
+</td>
+<td style="text-align:right;">
+0.7051
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+valence
+</td>
+<td style="text-align:right;">
+2.339
+</td>
+<td style="text-align:right;">
+6.784
+</td>
+<td style="text-align:right;">
+0.34
+</td>
+<td style="text-align:right;">
+0.7309
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+acousticness
+</td>
+<td style="text-align:right;">
+-7.098
+</td>
+<td style="text-align:right;">
+6.817
+</td>
+<td style="text-align:right;">
+-1.04
+</td>
+<td style="text-align:right;">
+0.3001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+instrumentalness
+</td>
+<td style="text-align:right;">
+0.770
+</td>
+<td style="text-align:right;">
+5.058
+</td>
+<td style="text-align:right;">
+0.15
+</td>
+<td style="text-align:right;">
+0.8793
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+liveness
+</td>
+<td style="text-align:right;">
+-2.939
+</td>
+<td style="text-align:right;">
+7.594
+</td>
+<td style="text-align:right;">
+-0.39
+</td>
+<td style="text-align:right;">
+0.6995
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+loudness
+</td>
+<td style="text-align:right;">
+-0.048
+</td>
+<td style="text-align:right;">
+0.442
+</td>
+<td style="text-align:right;">
+-0.11
+</td>
+<td style="text-align:right;">
+0.9141
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+speechiness
+</td>
+<td style="text-align:right;">
+-21.913
+</td>
+<td style="text-align:right;">
+12.611
+</td>
+<td style="text-align:right;">
+-1.74
+</td>
+<td style="text-align:right;">
+0.0851
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+tempo
+</td>
+<td style="text-align:right;">
+0.069
+</td>
+<td style="text-align:right;">
+0.045
+</td>
+<td style="text-align:right;">
+1.55
+</td>
+<td style="text-align:right;">
+0.1251
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre_Anime
+</td>
+<td style="text-align:right;">
+-13.922
+</td>
+<td style="text-align:right;">
+7.504
+</td>
+<td style="text-align:right;">
+-1.86
+</td>
+<td style="text-align:right;">
+0.0662
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre_Blues
+</td>
+<td style="text-align:right;">
+-14.249
+</td>
+<td style="text-align:right;">
+8.272
+</td>
+<td style="text-align:right;">
+-1.72
+</td>
+<td style="text-align:right;">
+0.0878
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>genre_Children's Music</code>
+</td>
+<td style="text-align:right;">
+-31.939
+</td>
+<td style="text-align:right;">
+10.272
+</td>
+<td style="text-align:right;">
+-3.11
+</td>
+<td style="text-align:right;">
+0.0024
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>genre_Children’s Music</code>
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre_Classical
+</td>
+<td style="text-align:right;">
+-21.120
+</td>
+<td style="text-align:right;">
+8.605
+</td>
+<td style="text-align:right;">
+-2.45
+</td>
+<td style="text-align:right;">
+0.0157
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre_Comedy
+</td>
+<td style="text-align:right;">
+-3.837
+</td>
+<td style="text-align:right;">
+13.784
+</td>
+<td style="text-align:right;">
+-0.28
+</td>
+<td style="text-align:right;">
+0.7813
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre_Country
+</td>
+<td style="text-align:right;">
+-9.634
+</td>
+<td style="text-align:right;">
+7.124
+</td>
+<td style="text-align:right;">
+-1.35
+</td>
+<td style="text-align:right;">
+0.1790
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre_Dance
+</td>
+<td style="text-align:right;">
+3.623
+</td>
+<td style="text-align:right;">
+8.065
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:right;">
+0.6541
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre_Electronic
+</td>
+<td style="text-align:right;">
+-11.763
+</td>
+<td style="text-align:right;">
+7.849
+</td>
+<td style="text-align:right;">
+-1.50
+</td>
+<td style="text-align:right;">
+0.1368
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre_Folk
+</td>
+<td style="text-align:right;">
+-4.125
+</td>
+<td style="text-align:right;">
+7.981
+</td>
+<td style="text-align:right;">
+-0.52
+</td>
+<td style="text-align:right;">
+0.6063
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>genre_Hip-Hop</code>
+</td>
+<td style="text-align:right;">
+9.068
+</td>
+<td style="text-align:right;">
+7.626
+</td>
+<td style="text-align:right;">
+1.19
+</td>
+<td style="text-align:right;">
+0.2369
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre_Jazz
+</td>
+<td style="text-align:right;">
+-9.703
+</td>
+<td style="text-align:right;">
+8.700
+</td>
+<td style="text-align:right;">
+-1.12
+</td>
+<td style="text-align:right;">
+0.2672
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre_Movie
+</td>
+<td style="text-align:right;">
+-19.124
+</td>
+<td style="text-align:right;">
+8.086
+</td>
+<td style="text-align:right;">
+-2.37
+</td>
+<td style="text-align:right;">
+0.0198
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre_Opera
+</td>
+<td style="text-align:right;">
+-30.191
+</td>
+<td style="text-align:right;">
+10.522
+</td>
+<td style="text-align:right;">
+-2.87
+</td>
+<td style="text-align:right;">
+0.0049
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre_Pop
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>genre_R&amp;amp;B</code>
+</td>
+<td style="text-align:right;">
+-15.744
+</td>
+<td style="text-align:right;">
+8.658
+</td>
+<td style="text-align:right;">
+-1.82
+</td>
+<td style="text-align:right;">
+0.0717
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre_Rap
+</td>
+<td style="text-align:right;">
+7.077
+</td>
+<td style="text-align:right;">
+15.615
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:right;">
+0.6513
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre_Reggae
+</td>
+<td style="text-align:right;">
+-6.156
+</td>
+<td style="text-align:right;">
+8.564
+</td>
+<td style="text-align:right;">
+-0.72
+</td>
+<td style="text-align:right;">
+0.4738
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre_Reggaeton
+</td>
+<td style="text-align:right;">
+-24.410
+</td>
+<td style="text-align:right;">
+7.520
+</td>
+<td style="text-align:right;">
+-3.25
+</td>
+<td style="text-align:right;">
+0.0016
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre_Rock
+</td>
+<td style="text-align:right;">
+0.594
+</td>
+<td style="text-align:right;">
+14.969
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+<td style="text-align:right;">
+0.9684
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre_Ska
+</td>
+<td style="text-align:right;">
+-25.761
+</td>
+<td style="text-align:right;">
+8.205
+</td>
+<td style="text-align:right;">
+-3.14
+</td>
+<td style="text-align:right;">
+0.0022
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre_Soul
+</td>
+<td style="text-align:right;">
+-16.092
+</td>
+<td style="text-align:right;">
+8.238
+</td>
+<td style="text-align:right;">
+-1.95
+</td>
+<td style="text-align:right;">
+0.0533
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre_Soundtrack
+</td>
+<td style="text-align:right;">
+-20.978
+</td>
+<td style="text-align:right;">
+10.390
+</td>
+<td style="text-align:right;">
+-2.02
+</td>
+<td style="text-align:right;">
+0.0459
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre_World
+</td>
+<td style="text-align:right;">
+-24.733
+</td>
+<td style="text-align:right;">
+8.255
+</td>
+<td style="text-align:right;">
+-3.00
+</td>
+<td style="text-align:right;">
+0.0034
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="interpretation" class="section level3">
+<h3>Interpretation:</h3>
+<p>The linear regression model estimated the relationship between audio
+features and Spotify track popularity. While several predictors had weak
+or statistically insignificant effects, a few variables stood out:</p>
+<ul>
+<li><p><strong>Speechiness</strong> had a <strong>large negative
+effect</strong> on popularity (<em>estimate = –21.9, p = 0.085</em>),
+suggesting that tracks with more spoken-word content tend to be
+<strong>less popular</strong>, though the result was only marginally
+significant.</p></li>
+<li><p><strong>Tempo</strong> had a <strong>positive
+coefficient</strong> (<em>estimate = 0.069, p = 0.125</em>), suggesting
+a weak upward trend: faster songs may be slightly more popular, but the
+effect is not strong enough to confirm statistically.</p></li>
+<li><p>Among the genre dummy variables, several showed <strong>strong
+and statistically significant negative effects</strong>, relative to the
+<strong>baseline genre</strong> (the first alphabetically omitted genre
+during dummy encoding — likely <code>"Alternative"</code>):</p>
+<ul>
+<li><code>genre_Children's Music</code> (<em>estimate = –31.94, p =
+0.002</em>)</li>
+<li><code>genre_Classical</code> (<em>estimate = –21.12, p =
+0.016</em>)</li>
+<li><code>genre_Opera</code> (<em>estimate = –30.19, p =
+0.005</em>)</li>
+<li><code>genre_Reggaeton</code> (<em>estimate = –24.41, p =
+0.002</em>)</li>
+<li><code>genre_Ska</code> (<em>estimate = –25.76, p = 0.002</em>)</li>
+<li><code>genre_Soundtrack</code> (<em>estimate = –20.98, p =
+0.046</em>)</li>
+<li><code>genre_World</code> (<em>estimate = –24.73, p =
+0.003</em>)</li>
+</ul>
+<p>These results suggest that tracks in these genres tend to have
+<strong>substantially lower popularity</strong> compared to the baseline
+genre.</p></li>
+<li><p>A few other genre effects, such as <code>genre_Hip-Hop</code>
+(<em>estimate = +9.07, p = 0.237</em>), showed a <strong>positive
+relationship</strong>, though they were <strong>not statistically
+significant</strong>.</p></li>
+</ul>
+<p>Overall, the model highlights that <strong>genre is a strong driver
+of popularity</strong>, with several genres consistently associated with
+lower popularity scores. Most audio features such as
+<code>danceability</code>, <code>energy</code>, and <code>valence</code>
+showed <strong>weak or inconsistent relationships</strong>, suggesting
+that <strong>non-audio factors like genre may play a bigger
+role</strong> in determining track popularity.</p>
+<hr />
+</div>
+</div>
+<div id="tree-based-machine-learning-models" class="section level1">
+<h1>Tree-Based Machine Learning Models</h1>
+<div id="regression-tree-analysis" class="section level2">
+<h2>Regression Tree Analysis</h2>
+<p>A regression tree model was fitted to capture potential
+nonlinearities and interaction effects among the predictors.</p>
+<div id="why-regression-trees" class="section level3">
+<h3>Why Regression Trees?</h3>
+<p>Regression trees can automatically detect and model nonlinear
+interactions without requiring explicit specification. They are highly
+interpretable, showing clear decision rules.</p>
+</div>
+<div id="assumptions-1" class="section level3">
+<h3>Assumptions:</h3>
+<ul>
+<li>No assumptions of linearity or normality</li>
+<li>Data is partitioned recursively based on feature thresholds</li>
+</ul>
+</div>
+<div id="limitations-1" class="section level3">
+<h3>Limitations:</h3>
+<p>Regression trees are prone to overfitting and can be sensitive to
+small changes in the data. Pruning or ensemble methods are needed to
+stabilize performance.</p>
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+</div>
+<div id="interpretation-1" class="section level3">
+<h3>Interpretation:</h3>
+<p>The regression tree model reveals how combinations of
+<strong>genre</strong> and specific audio features help explain
+variation in track popularity. The tree splits the data into distinct
+segments based on conditions that best reduce the prediction error at
+each step.</p>
+<div id="key-takeaways" class="section level4">
+<h4>Key takeaways:</h4>
+<ul>
+<li><p><strong>Genre is the dominant predictor</strong> in the first
+split. Tracks belonging to genres such as <em>Children’s Music,
+Classical, Opera, Reggaeton, Ska, Soundtrack,</em> and <em>World</em>
+are grouped together and associated with <strong>lower average
+popularity</strong> compared to genres like <em>Electronic, Jazz,
+R&amp;B,</em> and <em>Country</em>. This reinforces the findings from
+the linear regression model.</p></li>
+<li><p>Within the low-popularity genres group:</p>
+<ul>
+<li><strong>Speechiness</strong> becomes a key splitter. Tracks with
+high spoken content (<code>speechiness ≥ 0.057</code>) are further
+divided by genre again.</li>
+<li>Tracks from <em>Children’s Music, Classical, Opera,</em> etc. with
+<strong>high speechiness and low liveness</strong> tend to have the
+<strong>lowest popularity scores</strong>, consistent with the idea that
+highly spoken, live-sounding music in niche genres is less appealing to
+mainstream audiences.</li>
+</ul></li>
+<li><p>For the remaining genres:</p>
+<ul>
+<li><strong>Liveness</strong> and <strong>acousticness</strong> help
+distinguish subgroups. Tracks with lower liveness and lower acousticness
+appear to cluster toward higher popularity.</li>
+<li>In particular, tracks with <strong>high energy</strong> (≥ 0.81) are
+placed into the segment with the <strong>highest predicted
+popularity</strong> at the far right of the tree.</li>
+</ul></li>
+</ul>
+</div>
+<div id="overall-insight" class="section level4">
+<h4>Overall insight:</h4>
+<p>This tree structure provides an interpretable, rule-based
+understanding of track popularity. It reinforces that <strong>genre
+alone is a strong discriminator</strong>, and that certain features like
+<strong>speechiness</strong>, <strong>liveness</strong>, and
+<strong>energy</strong> further stratify popularity within genre-based
+groups.</p>
+<p>While more flexible models like random forests outperform the tree in
+RMSE, the regression tree offers valuable insight into
+<strong>how</strong> and <strong>why</strong> different subgroups of
+music tracks differ in popularity.</p>
+</div>
+</div>
+</div>
+<div id="random-forest-analysis-with-hyperparameter-tuning"
+class="section level2">
+<h2>Random Forest Analysis with Hyperparameter Tuning</h2>
+<p>A Random Forest model was trained and tuned to improve predictive
+performance. The best number of randomly selected predictors
+(<code>mtry</code>) was selected using 5-fold cross-validation.</p>
+<div id="why-random-forest" class="section level3">
+<h3>Why Random Forest?</h3>
+<p>Random Forests aggregate the predictions of many trees, reducing
+overfitting and capturing complex nonlinear interactions. They tend to
+perform better than individual trees on unseen data.</p>
+</div>
+<div id="assumptions-2" class="section level3">
+<h3>Assumptions:</h3>
+<ul>
+<li>Data points are independent</li>
+<li>No strict assumptions on distribution or linearity</li>
+<li>Some randomness improves generalization (bagging and random feature
+selection)</li>
+</ul>
+</div>
+<div id="limitations-2" class="section level3">
+<h3>Limitations:</h3>
+<p>Random Forests sacrifice some interpretability compared to single
+trees. Additionally, since popularity is influenced by many external
+factors (e.g., marketing, social media), audio features alone can still
+only explain part of the variability.</p>
+</div>
+<div id="training" class="section level3">
+<h3>Training:</h3>
+<p>To train the Random Forest model, we used the caret package, which
+streamlines model training and hyperparameter tuning. The train()
+function performs 5-fold cross-validation, where the dataset is split
+into five parts. Each part is used once as a validation set while the
+remaining four parts are used for training, rotating through all
+combinations. The mtry parameter — the number of variables randomly
+sampled at each tree split — was automatically tuned using tuneLength =
+5, meaning 5 candidate values were tested.</p>
+<p>The model was evaluated using Root Mean Squared Error (RMSE) across
+folds, and the best value of mtry was selected based on the lowest
+average RMSE. This helps balance bias and variance, improving
+generalization to unseen data.</p>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Best Hyperparameter (mtry) Selected by Cross-Validation
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+mtry
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Cross-Validation Results for Random Forest
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+mtry
+</th>
+<th style="text-align:right;">
+RMSE
+</th>
+<th style="text-align:right;">
+Rsquared
+</th>
+<th style="text-align:right;">
+MAE
+</th>
+<th style="text-align:right;">
+RMSESD
+</th>
+<th style="text-align:right;">
+RsquaredSD
+</th>
+<th style="text-align:right;">
+MAESD
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+15.15206
+</td>
+<td style="text-align:right;">
+0.1457952
+</td>
+<td style="text-align:right;">
+12.32024
+</td>
+<td style="text-align:right;">
+1.541014
+</td>
+<td style="text-align:right;">
+0.0351827
+</td>
+<td style="text-align:right;">
+1.2222666
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+15.85867
+</td>
+<td style="text-align:right;">
+0.0709314
+</td>
+<td style="text-align:right;">
+12.83007
+</td>
+<td style="text-align:right;">
+1.252749
+</td>
+<td style="text-align:right;">
+0.0312544
+</td>
+<td style="text-align:right;">
+1.0233129
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+16.13096
+</td>
+<td style="text-align:right;">
+0.0540812
+</td>
+<td style="text-align:right;">
+13.02352
+</td>
+<td style="text-align:right;">
+1.212213
+</td>
+<td style="text-align:right;">
+0.0276524
+</td>
+<td style="text-align:right;">
+0.9081943
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+16.19829
+</td>
+<td style="text-align:right;">
+0.0557225
+</td>
+<td style="text-align:right;">
+13.05223
+</td>
+<td style="text-align:right;">
+1.104523
+</td>
+<td style="text-align:right;">
+0.0283430
+</td>
+<td style="text-align:right;">
+0.9198491
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+33
+</td>
+<td style="text-align:right;">
+16.11543
+</td>
+<td style="text-align:right;">
+0.0622790
+</td>
+<td style="text-align:right;">
+12.96749
+</td>
+<td style="text-align:right;">
+1.209640
+</td>
+<td style="text-align:right;">
+0.0339101
+</td>
+<td style="text-align:right;">
+0.9715313
+</td>
+</tr>
+</tbody>
+</table>
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+</div>
+<div id="final-random-forest-evaluation-on-test-set"
+class="section level3">
+<h3>Final Random Forest Evaluation on Test Set:</h3>
+<p>The best tuned Random Forest model was evaluated on the held-out test
+set.</p>
+<pre><code>## Test RMSE (Random Forest): 17.37</code></pre>
+</div>
+<div id="final-comparison-of-model-performance" class="section level3">
+<h3>Final Comparison of Model Performance:</h3>
+<p>The test RMSEs for Linear Regression and Random Forest were compared
+to assess overall predictive performance.</p>
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+</div>
+<div id="random-forest-interpretation" class="section level3">
+<h3>Random Forest Interpretation</h3>
+<p>To improve prediction accuracy and capture complex, nonlinear
+relationships between audio features and track popularity, a Random
+Forest model was trained with hyperparameter tuning using
+cross-validation.</p>
+<p>The tuning plot above shows how the test RMSE varied as the number of
+randomly selected predictors (<code>mtry</code>) changed. The lowest
+RMSE occurred when using only a small number of predictors, suggesting
+that selecting a focused subset of variables helped reduce overfitting
+and noise.</p>
+<div id="final-model-performance" class="section level4">
+<h4>Final Model Performance</h4>
+<ul>
+<li><strong>Test RMSE</strong>: 17.37<br />
+This means that the model’s average error in predicting popularity
+scores was approximately 17.37 units on the original scale — a slight
+improvement over the decision tree model but slightly worse than the
+regularized linear model (RMSE ≈ 17.04).</li>
+</ul>
+</div>
+<div id="model-strengths" class="section level4">
+<h4>Model Strengths</h4>
+<ul>
+<li><strong>Captures nonlinear relationships</strong> between predictors
+and popularity</li>
+<li><strong>Automatically models feature interactions</strong>, such as
+combinations of genre and tempo or speechiness and loudness</li>
+<li><strong>Robust to multicollinearity</strong> and irrelevant
+predictors</li>
+</ul>
+</div>
+<div id="model-limitations" class="section level4">
+<h4>Model Limitations</h4>
+<ul>
+<li>While flexible, the Random Forest model <strong>sacrifices
+interpretability</strong> compared to simpler models like linear
+regression or decision trees.</li>
+<li>The RMSE improvement is marginal, suggesting that increased model
+complexity does not drastically improve prediction — possibly due to
+limits in the explanatory power of audio features alone.</li>
+<li>Genre remains a dominant driver of predictions, as seen in variable
+importance rankings (not shown here), while most continuous features
+contribute modestly.</li>
+</ul>
+</div>
+<div id="takeaway" class="section level4">
+<h4>Takeaway</h4>
+<p>The Random Forest model offered a flexible, ensemble-based approach
+to predicting Spotify track popularity. Although it did not outperform
+linear regression in this dataset, it validated that
+<strong>interactions and nonlinear effects exist</strong>, especially
+when accounting for categorical genres alongside audio
+characteristics.</p>
+<hr />
+</div>
+</div>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>This project explored the question: <strong>What audio features are
+most predictive of a song’s popularity on Spotify?</strong> By combining
+an open-source Kaggle dataset of Spotify tracks with real-time
+popularity data retrieved via the Spotify Web API, a diverse set of
+song-level features — including acoustic attributes and genre — were
+analyzed using multiple modeling approaches.</p>
+<div id="summary-of-findings" class="section level3">
+<h3>Summary of Findings:</h3>
+<ul>
+<li><p>A <strong>multiple linear regression model</strong> identified
+<strong>speechiness</strong> as a significant negative predictor of
+popularity and highlighted <strong>genre</strong> as a strong
+determinant. Several genres — including <em>Children’s Music, Classical,
+Opera,</em> and <em>Reggaeton</em> — were significantly associated with
+lower popularity scores. Surprisingly, this linear model achieved the
+<strong>lowest test RMSE of 17.04</strong>, outperforming more complex
+models.</p></li>
+<li><p>A <strong>regression tree</strong> provided interpretable
+insights into how <strong>genre</strong>, <strong>speechiness</strong>,
+<strong>energy</strong>, and <strong>liveness</strong> interact to
+segment songs into low and high popularity groups. This supported
+earlier regression findings and emphasized that tracks with lower speech
+content and high energy generally perform better.</p></li>
+<li><p>A <strong>random forest model</strong>, tuned using
+cross-validation, achieved a slightly higher test RMSE of
+<strong>17.37</strong>. While it did not outperform linear regression,
+it confirmed the importance of <strong>genre and energy</strong>, and
+demonstrated that nonlinear methods can provide robustness and
+additional feature interaction insights.</p></li>
+</ul>
+</div>
+<div id="key-takeaway" class="section level3">
+<h3>Key Takeaway:</h3>
+<p>Across all models, <strong>genre emerged as the most influential
+factor</strong> shaping track popularity, often more so than audio
+features like danceability or valence. While some attributes such as
+<strong>tempo</strong> and <strong>speechiness</strong> showed
+consistent effects, their impact was secondary to genre.</p>
+<p>This suggests that <strong>musical success on Spotify is driven not
+just by sound properties</strong>, but by broader contextual factors —
+including genre conventions, listener expectations, and possibly
+external dynamics like artist reputation or playlist inclusion — which
+were outside the scope of this analysis.</p>
+</div>
+<div id="future-directions" class="section level3">
+<h3>Future Directions:</h3>
+<ul>
+<li>Incorporating <strong>additional metadata</strong> such as release
+year, playlist placements, or follower counts could improve predictive
+performance.</li>
+<li>Modeling with <strong>XGBoost</strong> or <strong>neural
+networks</strong> could help capture deeper nonlinearities and hidden
+patterns.</li>
+<li>Further analysis on <strong>interactions between genre and
+features</strong> (e.g., speechiness in rap vs. classical) could provide
+richer, genre-specific insights.</li>
+</ul>
+<p>This analysis provides a strong foundation for understanding the
+complex drivers of music popularity and offers valuable direction for
+artists, producers, and data scientists alike.</p>
+<hr />
+</div>
+</div>
+<div id="bibliography" class="section level1">
+<h1>Bibliography</h1>
+<ul>
+<li>Pandya, M. (n.d.). Spotify Tracks Dataset. Kaggle. <a
+href="https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset">https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset</a></li>
+<li>Spotify for Developers. (n.d.). Web API Reference. <a
+href="https://developer.spotify.com/documentation/web-api">https://developer.spotify.com/documentation/web-api</a></li>
+<li>Kuhn, M. (2008). Building Predictive Models in R Using the caret
+Package. Journal of Statistical Software. <a
+href="https://cran.r-project.org/web/packages/caret/vignettes/caret.pdf">https://cran.r-project.org/web/packages/caret/vignettes/caret.pdf</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
