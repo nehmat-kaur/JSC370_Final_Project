@@ -42,7 +42,7 @@ The website includes:
 - A summary of the project and findings
 - Interactive plots
 - A downloadable PDF report
-- A video walkthrough (linked in the navigation bar)
+- A video walkthrough (linked in the navigation bar) 
 
 ---
 
