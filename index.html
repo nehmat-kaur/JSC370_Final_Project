@@ -362,7 +362,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Spotify Track Popularity Analysis</h1>
-<h4 class="author">Harnehmat Kaur (1008882648)</h4>
+<h4 class="author">Harnehmat Kaur</h4>
 <h4 class="date">2025-04-30</h4>
 
 </div>
@@ -525,7 +525,7 @@ between audio features (predictors) and track popularity (response).</p>
 <p>The true relationship between audio features and popularity may not
 be linear. If interactions or nonlinear effects exist, linear regression
 will miss them, leading to underfitting.</p>
-<pre><code>## Test RMSE (Linear Regression): 17.04</code></pre>
+<pre><code>## Test RMSE (Linear Regression): 17.03</code></pre>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 Table: Linear Regression Coefficients for Predicting Track Popularity
@@ -555,16 +555,16 @@ p.value
 (Intercept)
 </td>
 <td style="text-align:right;">
-45.917
+45.742
 </td>
 <td style="text-align:right;">
-15.709
+15.731
 </td>
 <td style="text-align:right;">
-2.92
+2.91
 </td>
 <td style="text-align:right;">
-0.0042
+0.0044
 </td>
 </tr>
 <tr>
@@ -572,16 +572,16 @@ p.value
 danceability
 </td>
 <td style="text-align:right;">
--3.968
+-3.794
 </td>
 <td style="text-align:right;">
-12.024
+12.040
 </td>
 <td style="text-align:right;">
--0.33
+-0.32
 </td>
 <td style="text-align:right;">
-0.7420
+0.7533
 </td>
 </tr>
 <tr>
@@ -589,16 +589,16 @@ danceability
 energy
 </td>
 <td style="text-align:right;">
--4.656
+-4.475
 </td>
 <td style="text-align:right;">
-12.270
+12.287
 </td>
 <td style="text-align:right;">
--0.38
+-0.36
 </td>
 <td style="text-align:right;">
-0.7051
+0.7164
 </td>
 </tr>
 <tr>
@@ -606,16 +606,16 @@ energy
 valence
 </td>
 <td style="text-align:right;">
-2.339
+2.267
 </td>
 <td style="text-align:right;">
-6.784
+6.794
 </td>
 <td style="text-align:right;">
-0.34
+0.33
 </td>
 <td style="text-align:right;">
-0.7309
+0.7392
 </td>
 </tr>
 <tr>
@@ -623,16 +623,16 @@ valence
 acousticness
 </td>
 <td style="text-align:right;">
--7.098
+-6.948
 </td>
 <td style="text-align:right;">
-6.817
+6.826
 </td>
 <td style="text-align:right;">
--1.04
+-1.02
 </td>
 <td style="text-align:right;">
-0.3001
+0.3110
 </td>
 </tr>
 <tr>
@@ -640,16 +640,16 @@ acousticness
 instrumentalness
 </td>
 <td style="text-align:right;">
-0.770
+0.694
 </td>
 <td style="text-align:right;">
-5.058
+5.065
 </td>
 <td style="text-align:right;">
-0.15
+0.14
 </td>
 <td style="text-align:right;">
-0.8793
+0.8912
 </td>
 </tr>
 <tr>
@@ -657,16 +657,16 @@ instrumentalness
 liveness
 </td>
 <td style="text-align:right;">
--2.939
+-2.930
 </td>
 <td style="text-align:right;">
-7.594
+7.605
 </td>
 <td style="text-align:right;">
 -0.39
 </td>
 <td style="text-align:right;">
-0.6995
+0.7008
 </td>
 </tr>
 <tr>
@@ -674,16 +674,16 @@ liveness
 loudness
 </td>
 <td style="text-align:right;">
--0.048
+-0.053
 </td>
 <td style="text-align:right;">
-0.442
+0.443
 </td>
 <td style="text-align:right;">
--0.11
+-0.12
 </td>
 <td style="text-align:right;">
-0.9141
+0.9055
 </td>
 </tr>
 <tr>
@@ -691,16 +691,16 @@ loudness
 speechiness
 </td>
 <td style="text-align:right;">
--21.913
+-22.135
 </td>
 <td style="text-align:right;">
-12.611
+12.629
 </td>
 <td style="text-align:right;">
--1.74
+-1.75
 </td>
 <td style="text-align:right;">
-0.0851
+0.0824
 </td>
 </tr>
 <tr>
@@ -714,10 +714,10 @@ tempo
 0.045
 </td>
 <td style="text-align:right;">
-1.55
+1.53
 </td>
 <td style="text-align:right;">
-0.1251
+0.1282
 </td>
 </tr>
 <tr>
@@ -725,16 +725,16 @@ tempo
 genre_Anime
 </td>
 <td style="text-align:right;">
--13.922
+-14.029
 </td>
 <td style="text-align:right;">
-7.504
+7.515
 </td>
 <td style="text-align:right;">
--1.86
+-1.87
 </td>
 <td style="text-align:right;">
-0.0662
+0.0646
 </td>
 </tr>
 <tr>
@@ -742,16 +742,16 @@ genre_Anime
 genre_Blues
 </td>
 <td style="text-align:right;">
--14.249
+-14.234
 </td>
 <td style="text-align:right;">
-8.272
+8.284
 </td>
 <td style="text-align:right;">
 -1.72
 </td>
 <td style="text-align:right;">
-0.0878
+0.0886
 </td>
 </tr>
 <tr>
@@ -759,16 +759,16 @@ genre_Blues
 <code>genre_Children's Music</code>
 </td>
 <td style="text-align:right;">
--31.939
+-31.606
 </td>
 <td style="text-align:right;">
-10.272
+10.287
 </td>
 <td style="text-align:right;">
--3.11
+-3.07
 </td>
 <td style="text-align:right;">
-0.0024
+0.0027
 </td>
 </tr>
 <tr>
@@ -793,10 +793,10 @@ NA
 genre_Classical
 </td>
 <td style="text-align:right;">
--21.120
+-21.146
 </td>
 <td style="text-align:right;">
-8.605
+8.617
 </td>
 <td style="text-align:right;">
 -2.45
@@ -810,16 +810,16 @@ genre_Classical
 genre_Comedy
 </td>
 <td style="text-align:right;">
--3.837
+-3.804
 </td>
 <td style="text-align:right;">
-13.784
+13.803
 </td>
 <td style="text-align:right;">
 -0.28
 </td>
 <td style="text-align:right;">
-0.7813
+0.7834
 </td>
 </tr>
 <tr>
@@ -827,16 +827,16 @@ genre_Comedy
 genre_Country
 </td>
 <td style="text-align:right;">
--9.634
+-9.635
 </td>
 <td style="text-align:right;">
-7.124
+7.134
 </td>
 <td style="text-align:right;">
 -1.35
 </td>
 <td style="text-align:right;">
-0.1790
+0.1796
 </td>
 </tr>
 <tr>
@@ -844,16 +844,16 @@ genre_Country
 genre_Dance
 </td>
 <td style="text-align:right;">
-3.623
+3.602
 </td>
 <td style="text-align:right;">
-8.065
+8.076
 </td>
 <td style="text-align:right;">
 0.45
 </td>
 <td style="text-align:right;">
-0.6541
+0.6564
 </td>
 </tr>
 <tr>
@@ -861,16 +861,16 @@ genre_Dance
 genre_Electronic
 </td>
 <td style="text-align:right;">
--11.763
+-11.640
 </td>
 <td style="text-align:right;">
-7.849
+7.859
 </td>
 <td style="text-align:right;">
--1.50
+-1.48
 </td>
 <td style="text-align:right;">
-0.1368
+0.1414
 </td>
 </tr>
 <tr>
@@ -878,16 +878,16 @@ genre_Electronic
 genre_Folk
 </td>
 <td style="text-align:right;">
--4.125
+-4.176
 </td>
 <td style="text-align:right;">
-7.981
+7.992
 </td>
 <td style="text-align:right;">
 -0.52
 </td>
 <td style="text-align:right;">
-0.6063
+0.6024
 </td>
 </tr>
 <tr>
@@ -895,16 +895,16 @@ genre_Folk
 <code>genre_Hip-Hop</code>
 </td>
 <td style="text-align:right;">
-9.068
+9.091
 </td>
 <td style="text-align:right;">
-7.626
+7.636
 </td>
 <td style="text-align:right;">
 1.19
 </td>
 <td style="text-align:right;">
-0.2369
+0.2364
 </td>
 </tr>
 <tr>
@@ -912,16 +912,16 @@ genre_Folk
 genre_Jazz
 </td>
 <td style="text-align:right;">
--9.703
+-9.699
 </td>
 <td style="text-align:right;">
-8.700
+8.712
 </td>
 <td style="text-align:right;">
--1.12
+-1.11
 </td>
 <td style="text-align:right;">
-0.2672
+0.2680
 </td>
 </tr>
 <tr>
@@ -929,16 +929,16 @@ genre_Jazz
 genre_Movie
 </td>
 <td style="text-align:right;">
--19.124
+-19.315
 </td>
 <td style="text-align:right;">
-8.086
+8.098
 </td>
 <td style="text-align:right;">
--2.37
+-2.39
 </td>
 <td style="text-align:right;">
-0.0198
+0.0188
 </td>
 </tr>
 <tr>
@@ -946,10 +946,10 @@ genre_Movie
 genre_Opera
 </td>
 <td style="text-align:right;">
--30.191
+-30.221
 </td>
 <td style="text-align:right;">
-10.522
+10.536
 </td>
 <td style="text-align:right;">
 -2.87
@@ -980,16 +980,16 @@ NA
 <code>genre_R&amp;amp;B</code>
 </td>
 <td style="text-align:right;">
--15.744
+-15.739
 </td>
 <td style="text-align:right;">
-8.658
+8.670
 </td>
 <td style="text-align:right;">
 -1.82
 </td>
 <td style="text-align:right;">
-0.0717
+0.0722
 </td>
 </tr>
 <tr>
@@ -997,16 +997,16 @@ NA
 genre_Rap
 </td>
 <td style="text-align:right;">
-7.077
+7.091
 </td>
 <td style="text-align:right;">
-15.615
+15.637
 </td>
 <td style="text-align:right;">
 0.45
 </td>
 <td style="text-align:right;">
-0.6513
+0.6511
 </td>
 </tr>
 <tr>
@@ -1014,16 +1014,16 @@ genre_Rap
 genre_Reggae
 </td>
 <td style="text-align:right;">
--6.156
+-6.157
 </td>
 <td style="text-align:right;">
-8.564
+8.576
 </td>
 <td style="text-align:right;">
 -0.72
 </td>
 <td style="text-align:right;">
-0.4738
+0.4744
 </td>
 </tr>
 <tr>
@@ -1031,13 +1031,13 @@ genre_Reggae
 genre_Reggaeton
 </td>
 <td style="text-align:right;">
--24.410
+-24.436
 </td>
 <td style="text-align:right;">
-7.520
+7.530
 </td>
 <td style="text-align:right;">
--3.25
+-3.24
 </td>
 <td style="text-align:right;">
 0.0016
@@ -1048,16 +1048,16 @@ genre_Reggaeton
 genre_Rock
 </td>
 <td style="text-align:right;">
-0.594
+0.592
 </td>
 <td style="text-align:right;">
-14.969
+14.989
 </td>
 <td style="text-align:right;">
 0.04
 </td>
 <td style="text-align:right;">
-0.9684
+0.9686
 </td>
 </tr>
 <tr>
@@ -1065,13 +1065,13 @@ genre_Rock
 genre_Ska
 </td>
 <td style="text-align:right;">
--25.761
+-25.750
 </td>
 <td style="text-align:right;">
-8.205
+8.217
 </td>
 <td style="text-align:right;">
--3.14
+-3.13
 </td>
 <td style="text-align:right;">
 0.0022
@@ -1082,10 +1082,10 @@ genre_Ska
 genre_Soul
 </td>
 <td style="text-align:right;">
--16.092
+-16.112
 </td>
 <td style="text-align:right;">
-8.238
+8.249
 </td>
 <td style="text-align:right;">
 -1.95
@@ -1099,16 +1099,16 @@ genre_Soul
 genre_Soundtrack
 </td>
 <td style="text-align:right;">
--20.978
+-20.960
 </td>
 <td style="text-align:right;">
-10.390
+10.405
 </td>
 <td style="text-align:right;">
--2.02
+-2.01
 </td>
 <td style="text-align:right;">
-0.0459
+0.0464
 </td>
 </tr>
 <tr>
@@ -1116,10 +1116,10 @@ genre_Soundtrack
 genre_World
 </td>
 <td style="text-align:right;">
--24.733
+-24.768
 </td>
 <td style="text-align:right;">
-8.255
+8.266
 </td>
 <td style="text-align:right;">
 -3.00
@@ -1359,22 +1359,22 @@ MAESD
 2
 </td>
 <td style="text-align:right;">
-15.15206
+15.14452
 </td>
 <td style="text-align:right;">
-0.1457952
+0.1460597
 </td>
 <td style="text-align:right;">
-12.32024
+12.34444
 </td>
 <td style="text-align:right;">
-1.541014
+1.534650
 </td>
 <td style="text-align:right;">
-0.0351827
+0.0335473
 </td>
 <td style="text-align:right;">
-1.2222666
+1.1481035
 </td>
 </tr>
 <tr>
@@ -1382,22 +1382,22 @@ MAESD
 9
 </td>
 <td style="text-align:right;">
-15.85867
+15.81133
 </td>
 <td style="text-align:right;">
-0.0709314
+0.0731567
 </td>
 <td style="text-align:right;">
-12.83007
+12.76553
 </td>
 <td style="text-align:right;">
-1.252749
+1.311952
 </td>
 <td style="text-align:right;">
-0.0312544
+0.0321560
 </td>
 <td style="text-align:right;">
-1.0233129
+1.0116775
 </td>
 </tr>
 <tr>
@@ -1405,22 +1405,22 @@ MAESD
 17
 </td>
 <td style="text-align:right;">
-16.13096
+16.11745
 </td>
 <td style="text-align:right;">
-0.0540812
+0.0576891
 </td>
 <td style="text-align:right;">
-13.02352
+13.08369
 </td>
 <td style="text-align:right;">
-1.212213
+1.241967
 </td>
 <td style="text-align:right;">
-0.0276524
+0.0353809
 </td>
 <td style="text-align:right;">
-0.9081943
+1.0444009
 </td>
 </tr>
 <tr>
@@ -1428,22 +1428,22 @@ MAESD
 25
 </td>
 <td style="text-align:right;">
-16.19829
+16.09551
 </td>
 <td style="text-align:right;">
-0.0557225
+0.0601657
 </td>
 <td style="text-align:right;">
-13.05223
+13.07003
 </td>
 <td style="text-align:right;">
-1.104523
+1.153932
 </td>
 <td style="text-align:right;">
-0.0283430
+0.0325148
 </td>
 <td style="text-align:right;">
-0.9198491
+0.9643427
 </td>
 </tr>
 <tr>
@@ -1451,22 +1451,22 @@ MAESD
 33
 </td>
 <td style="text-align:right;">
-16.11543
+16.21582
 </td>
 <td style="text-align:right;">
-0.0622790
+0.0547585
 </td>
 <td style="text-align:right;">
-12.96749
+13.02023
 </td>
 <td style="text-align:right;">
-1.209640
+1.264410
 </td>
 <td style="text-align:right;">
-0.0339101
+0.0304160
 </td>
 <td style="text-align:right;">
-0.9715313
+0.9433757
 </td>
 </tr>
 </tbody>
@@ -1478,7 +1478,7 @@ class="section level3">
 <h3>Final Random Forest Evaluation on Test Set:</h3>
 <p>The best tuned Random Forest model was evaluated on the held-out test
 set.</p>
-<pre><code>## Test RMSE (Random Forest): 17.37</code></pre>
+<pre><code>## Test RMSE (Random Forest): 17.44</code></pre>
 </div>
 <div id="final-comparison-of-model-performance" class="section level3">
 <h3>Final Comparison of Model Performance:</h3>
